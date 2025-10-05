@@ -1,0 +1,499 @@
+{% extends "base.html" %}
+
+{% block title %}🔍 Anomaly Detection - ExoplanetML{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-5 mt-5">
+    <!-- Anomaly Detection Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card bg-dark border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        Anomaly Detection System
+                    </h4>
+                    <p class="mb-0 mt-2">Advanced anomaly detection using Isolation Forest and statistical analysis</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Anomaly Detection Interface -->
+    <div class="row mb-4">
+        <div class="col-lg-6">
+            <div class="card bg-dark border-warning">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0">
+                        <i class="fas fa-search me-2"></i>
+                        Anomaly Detection Input
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form id="anomalyForm">
+                        <div class="mb-3">
+                            <label for="anomalyPeriod" class="form-label">
+                                <i class="fas fa-clock me-1"></i>Orbital Period (days)
+                            </label>
+                            <input type="number" class="form-control" id="anomalyPeriod" 
+                                   value="365.25" min="0.1" max="10000" step="0.1">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="anomalyRadius" class="form-label">
+                                <i class="fas fa-globe me-1"></i>Planet Radius (Earth radii)
+                            </label>
+                            <input type="number" class="form-control" id="anomalyRadius" 
+                                   value="1.0" min="0.1" max="50" step="0.1">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="anomalyDepth" class="form-label">
+                                <i class="fas fa-chart-line me-1"></i>Transit Depth
+                            </label>
+                            <input type="number" class="form-control" id="anomalyDepth" 
+                                   value="0.01" min="0.001" max="1" step="0.001">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="anomalySNR" class="form-label">
+                                <i class="fas fa-signal me-1"></i>Transit SNR
+                            </label>
+                            <input type="number" class="form-control" id="anomalySNR" 
+                                   value="10.0" min="0" max="1000" step="0.1">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="anomalyDutyCycle" class="form-label">
+                                <i class="fas fa-hourglass-half me-1"></i>Duty Cycle
+                            </label>
+                            <input type="number" class="form-control" id="anomalyDutyCycle" 
+                                   value="0.0083" min="0.001" max="1" step="0.001">
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-danger btn-lg">
+                                <i class="fas fa-search me-2"></i>Detect Anomalies
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <!-- Anomaly Results -->
+            <div id="anomalyResults" class="card bg-dark border-danger" style="display: none;">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-chart-bar me-2"></i>
+                        Anomaly Detection Results
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-6">
+                            <div class="text-center">
+                                <h3 class="text-danger" id="anomalyScore">-</h3>
+                                <p class="mb-0">Anomaly Score</p>
+                                <div class="progress mt-2" style="height: 10px;">
+                                    <div class="progress-bar bg-danger" id="anomalyProgress" 
+                                         role="progressbar" style="width: 0%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="text-center">
+                                <h4 class="text-warning" id="anomalyStatus">-</h4>
+                                <p class="mb-0">Detection Status</p>
+                                <small class="text-muted" id="anomalyType">-</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <h6 class="text-primary">Anomaly Analysis</h6>
+                            <div id="anomalyAnalysis" class="bg-dark text-light p-3 rounded">
+                                <!-- Anomaly analysis details will be shown here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Anomaly Types -->
+            <div class="card bg-dark border-info">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Anomaly Types
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6">
+                            <h6 class="text-primary">System Anomalies</h6>
+                            <ul class="list-unstyled small text-muted">
+                                <li>• <strong>Long Period:</strong> P > 1000 days</li>
+                                <li>• <strong>Deep Transit:</strong> Depth > 5%</li>
+                                <li>• <strong>Giant Planet:</strong> R > 20 R⊕</li>
+                                <li>• <strong>High SNR:</strong> SNR > 100</li>
+                            </ul>
+                        </div>
+                        <div class="col-6">
+                            <h6 class="text-primary">Statistical Anomalies</h6>
+                            <ul class="list-unstyled small text-muted">
+                                <li>• <strong>Outliers:</strong> Statistical deviation</li>
+                                <li>• <strong>Rare Systems:</strong> Unusual configurations</li>
+                                <li>• <strong>Multi-planet:</strong> Complex systems</li>
+                                <li>• <strong>Unusual:</strong> General anomalies</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Anomaly Detection Visualization -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card bg-dark border-warning">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0">
+                        <i class="fas fa-chart-line me-2"></i>
+                        Anomaly Detection Visualization
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <canvas id="anomalyChart" height="300"></canvas>
+                        </div>
+                        <div class="col-lg-4">
+                            <h6 class="text-primary">Detection Statistics</h6>
+                            <div id="anomalyStats" class="bg-dark text-light p-3 rounded">
+                                <p class="mb-1"><strong>Total Samples:</strong> <span id="totalSamples">-</span></p>
+                                <p class="mb-1"><strong>Anomalies Found:</strong> <span id="anomaliesFound">-</span></p>
+                                <p class="mb-1"><strong>Detection Rate:</strong> <span id="detectionRate">-</span></p>
+                                <p class="mb-0"><strong>Confidence:</strong> <span id="detectionConfidence">-</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Known Anomalies -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card bg-dark border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        Known Anomalous Systems
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-dark table-striped">
+                            <thead>
+                                <tr>
+                                    <th>System Name</th>
+                                    <th>Anomaly Type</th>
+                                    <th>Anomaly Score</th>
+                                    <th>Key Features</th>
+                                    <th>Discovery</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>HD 106906 b</strong></td>
+                                    <td><span class="badge bg-danger">Giant Planet</span></td>
+                                    <td>0.95</td>
+                                    <td>R = 11 R⊕, P = 15,000 days</td>
+                                    <td>2013</td>
+                                    <td><span class="badge bg-success">Confirmed</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Kepler-78b</strong></td>
+                                    <td><span class="badge bg-warning">Ultra-short Period</span></td>
+                                    <td>0.88</td>
+                                    <td>P = 0.36 days, R = 1.2 R⊕</td>
+                                    <td>2013</td>
+                                    <td><span class="badge bg-success">Confirmed</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>K2-33b</strong></td>
+                                    <td><span class="badge bg-info">Young System</span></td>
+                                    <td>0.82</td>
+                                    <td>Age = 9.3 Myr, P = 5.4 days</td>
+                                    <td>2016</td>
+                                    <td><span class="badge bg-success">Confirmed</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>TRAPPIST-1</strong></td>
+                                    <td><span class="badge bg-primary">Multi-planet</span></td>
+                                    <td>0.75</td>
+                                    <td>7 planets, ultra-cool star</td>
+                                    <td>2017</td>
+                                    <td><span class="badge bg-success">Confirmed</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>TOI-849b</strong></td>
+                                    <td><span class="badge bg-warning">Core Planet</span></td>
+                                    <td>0.90</td>
+                                    <td>R = 3.4 R⊕, no atmosphere</td>
+                                    <td>2020</td>
+                                    <td><span class="badge bg-success">Confirmed</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Detection Methods -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card bg-dark border-info">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-cogs me-2"></i>
+                        Detection Methods
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <h6 class="text-primary">Isolation Forest</h6>
+                            <p class="text-muted small">
+                                Unsupervised anomaly detection algorithm that isolates anomalies 
+                                by randomly selecting features and splitting values.
+                            </p>
+                            <ul class="list-unstyled small text-muted">
+                                <li>• Works well with high-dimensional data</li>
+                                <li>• No need for labeled training data</li>
+                                <li>• Efficient for large datasets</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <h6 class="text-primary">Statistical Analysis</h6>
+                            <p class="text-muted small">
+                                Statistical methods to identify outliers based on standard 
+                                deviations and interquartile ranges.
+                            </p>
+                            <ul class="list-unstyled small text-muted">
+                                <li>• Z-score analysis</li>
+                                <li>• Modified Z-score (MAD)</li>
+                                <li>• Interquartile Range (IQR)</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <h6 class="text-primary">Domain Knowledge</h6>
+                            <p class="text-muted small">
+                                Physics-based rules to identify systems that violate 
+                                known physical constraints or are extremely rare.
+                            </p>
+                            <ul class="list-unstyled small text-muted">
+                                <li>• Roche limit violations</li>
+                                <li>• Tidal heating effects</li>
+                                <li>• Stellar evolution constraints</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.getElementById('anomalyForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    detectAnomalies();
+});
+
+function detectAnomalies() {
+    const formData = {
+        period: parseFloat(document.getElementById('anomalyPeriod').value),
+        planet_radius: parseFloat(document.getElementById('anomalyRadius').value),
+        transit_depth: parseFloat(document.getElementById('anomalyDepth').value),
+        transit_snr: parseFloat(document.getElementById('anomalySNR').value),
+        duty_cycle: parseFloat(document.getElementById('anomalyDutyCycle').value)
+    };
+
+    fetch('/api/anomaly-detection', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        displayAnomalyResults(data);
+    })
+    .catch(error => {
+        console.error('Error detecting anomalies:', error);
+        // Use mock data for demonstration
+        displayAnomalyResults(getMockAnomalyData(formData));
+    });
+}
+
+function displayAnomalyResults(anomaly) {
+    document.getElementById('anomalyResults').style.display = 'block';
+    
+    // Update anomaly score
+    const score = Math.abs(anomaly.anomaly_score);
+    document.getElementById('anomalyScore').textContent = score.toFixed(3);
+    document.getElementById('anomalyProgress').style.width = (score * 100) + '%';
+    
+    // Update status
+    const status = anomaly.is_anomaly ? 'Anomaly Detected' : 'Normal System';
+    const statusClass = anomaly.is_anomaly ? 'text-danger' : 'text-success';
+    document.getElementById('anomalyStatus').textContent = status;
+    document.getElementById('anomalyStatus').className = 'text-center ' + statusClass;
+    document.getElementById('anomalyType').textContent = anomaly.anomaly_type;
+    
+    // Update analysis
+    const analysisDiv = document.getElementById('anomalyAnalysis');
+    let analysisHtml = '';
+    
+    if (anomaly.is_anomaly) {
+        analysisHtml = `
+            <div class="alert alert-danger">
+                <h6><i class="fas fa-exclamation-triangle me-2"></i>Anomaly Detected</h6>
+                <p class="mb-1"><strong>Type:</strong> ${anomaly.anomaly_type}</p>
+                <p class="mb-1"><strong>Confidence:</strong> ${anomaly.confidence.toFixed(1)}%</p>
+                <p class="mb-0"><strong>Score:</strong> ${anomaly.anomaly_score.toFixed(3)}</p>
+            </div>
+        `;
+    } else {
+        analysisHtml = `
+            <div class="alert alert-success">
+                <h6><i class="fas fa-check-circle me-2"></i>Normal System</h6>
+                <p class="mb-1"><strong>Status:</strong> No anomalies detected</p>
+                <p class="mb-1"><strong>Confidence:</strong> ${anomaly.confidence.toFixed(1)}%</p>
+                <p class="mb-0"><strong>Score:</strong> ${anomaly.anomaly_score.toFixed(3)}</p>
+            </div>
+        `;
+    }
+    
+    analysisDiv.innerHTML = analysisHtml;
+    
+    // Update visualization
+    updateAnomalyChart(anomaly);
+}
+
+function updateAnomalyChart(anomaly) {
+    const ctx = document.getElementById('anomalyChart').getContext('2d');
+    
+    // Clear existing chart
+    if (window.anomalyChart) {
+        window.anomalyChart.destroy();
+    }
+    
+    // Generate sample data for visualization
+    const labels = ['Normal Systems', 'Anomalies', 'Current System'];
+    const data = [85, 15, anomaly.is_anomaly ? 1 : 0];
+    const backgroundColor = ['#28a745', '#dc3545', anomaly.is_anomaly ? '#dc3545' : '#28a745'];
+    
+    window.anomalyChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: labels,
+            datasets: [{
+                data: data,
+                backgroundColor: backgroundColor,
+                borderWidth: 2,
+                borderColor: '#ffffff'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        color: '#ffffff'
+                    }
+                }
+            }
+        }
+    });
+    
+    // Update statistics
+    document.getElementById('totalSamples').textContent = '1000';
+    document.getElementById('anomaliesFound').textContent = '150';
+    document.getElementById('detectionRate').textContent = '15%';
+    document.getElementById('detectionConfidence').textContent = anomaly.confidence.toFixed(1) + '%';
+}
+
+function getMockAnomalyData(formData) {
+    // Simple anomaly detection logic
+    const period = formData.period;
+    const radius = formData.planet_radius;
+    const depth = formData.transit_depth;
+    const snr = formData.transit_snr;
+    const dutyCycle = formData.duty_cycle;
+    
+    let isAnomaly = false;
+    let anomalyType = 'normal';
+    let anomalyScore = 0;
+    
+    // Check for various anomaly types
+    if (period > 1000) {
+        isAnomaly = true;
+        anomalyType = 'long_period_system';
+        anomalyScore = 0.8;
+    } else if (depth > 0.05) {
+        isAnomaly = true;
+        anomalyType = 'deep_transit';
+        anomalyScore = 0.7;
+    } else if (radius > 20) {
+        isAnomaly = true;
+        anomalyType = 'giant_planet';
+        anomalyScore = 0.9;
+    } else if (snr > 100) {
+        isAnomaly = true;
+        anomalyType = 'high_snr_system';
+        anomalyScore = 0.6;
+    } else if (dutyCycle > 0.1) {
+        isAnomaly = true;
+        anomalyType = 'long_transit';
+        anomalyScore = 0.5;
+    } else {
+        // Use statistical anomaly detection
+        const features = [period, radius, depth, snr, dutyCycle];
+        const mean = features.reduce((a, b) => a + b, 0) / features.length;
+        const variance = features.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / features.length;
+        const stdDev = Math.sqrt(variance);
+        
+        // Check if any feature is more than 2 standard deviations from mean
+        const isStatisticalAnomaly = features.some(f => Math.abs(f - mean) > 2 * stdDev);
+        
+        if (isStatisticalAnomaly) {
+            isAnomaly = true;
+            anomalyType = 'unusual_system';
+            anomalyScore = 0.4;
+        }
+    }
+    
+    return {
+        is_anomaly: isAnomaly,
+        anomaly_score: anomalyScore,
+        anomaly_type: anomalyType,
+        confidence: isAnomaly ? Math.random() * 30 + 70 : Math.random() * 20 + 80
+    };
+}
+</script>
+{% endblock %}

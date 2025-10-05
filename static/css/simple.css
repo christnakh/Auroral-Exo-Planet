@@ -1,0 +1,297 @@
+/* Minimalist override styles for a clean, simple design across all pages */
+
+/* Base */
+:root {
+  --c-bg: #ffffff;
+  --c-surface: #ffffff;
+  --c-border: #e5e7eb;
+  --c-text: #111827;
+  --c-text-muted: #6b7280;
+  --c-primary: #6d28d9;
+  --radius: 10px;
+}
+
+html, body {
+  background: var(--c-bg) !important;
+  color: var(--c-text) !important;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif !important;
+}
+
+/* Layout containers */
+.container, .container-fluid {
+  max-width: 1100px !important;
+}
+
+/* Navbar */
+.main-header {
+  background: #ffffff !important;
+  box-shadow: none !important;
+  border-bottom: 1px solid var(--c-border) !important;
+}
+.navbar .logo { color: var(--c-text) !important; }
+.navbar .logo::before { content: none !important; }
+.navbar { padding: 0.75rem 0 !important; }
+.navbar .logo { font-weight: 800 !important; color: #6d28d9 !important; }
+.nav-links a, .dropbtn {
+  background: transparent !important;
+  color: var(--c-text-muted) !important;
+  border: none !important;
+}
+.nav-links a:hover, .dropbtn:hover {
+  background: #f9fafb !important;
+  color: var(--c-text) !important;
+  border: 1px solid var(--c-border) !important;
+}
+
+/* Hero sections */
+/* Reintroduce a clean purple gradient with subtle depth */
+.auroracle-hero-full {
+  background: radial-gradient(60% 80% at 80% 20%, rgba(124, 58, 237, 0.25) 0%, rgba(124, 58, 237, 0) 60%),
+              radial-gradient(70% 90% at 10% 80%, rgba(196, 181, 253, 0.35) 0%, rgba(196, 181, 253, 0) 65%),
+              linear-gradient(135deg, #ede9fe 0%, #c4b5fd 35%, #7c3aed 100%) !important;
+  min-height: 70vh !important;
+}
+.hero-large,
+.hero-small {
+  background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%) !important;
+  min-height: 50vh !important;
+}
+.hero-content { min-height: 60vh !important; padding: 4rem 1.25rem !important; }
+/* Gradient text for the main hero title */
+.hero-title {
+  background: linear-gradient(135deg, #5b21b6 0%, #7c3aed 60%, #a78bfa 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+  color: transparent !important;
+  font-size: 3rem !important;
+  text-shadow: none !important;
+}
+.hero-subtitle { color: rgba(17, 24, 39, 0.8) !important; text-shadow: none !important; }
+.logo-icon { box-shadow: none !important; background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%) !important; }
+
+/* Cards */
+.card {
+  background: var(--c-surface) !important;
+  border: 1px solid var(--c-border) !important;
+  box-shadow: none !important;
+  border-radius: var(--radius) !important;
+  padding: 1.25rem !important;
+}
+.card-header {
+  background: #f9fafb !important;
+  color: var(--c-text) !important;
+  margin: -1.25rem -1.25rem 1rem -1.25rem !important;
+  border-bottom: 1px solid var(--c-border) !important;
+  border-radius: var(--radius) var(--radius) 0 0 !important;
+}
+.card:hover { transform: none !important; }
+
+/* Buttons */
+.btn,
+.primary-btn,
+.secondary-btn,
+.api-btn-primary,
+.api-btn-secondary,
+.analysis-btn,
+.batch-btn,
+.models-btn {
+  border-radius: 8px !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+.primary-btn,
+.api-btn-primary,
+.analysis-btn {
+  background: var(--c-primary) !important;
+  color: #ffffff !important;
+  border: 1px solid var(--c-primary) !important;
+}
+.secondary-btn,
+.api-btn-secondary {
+  background: transparent !important;
+  color: var(--c-primary) !important;
+  border: 1px solid var(--c-primary) !important;
+}
+.btn:hover,
+.primary-btn:hover,
+.secondary-btn:hover,
+.api-btn-primary:hover,
+.api-btn-secondary:hover,
+.analysis-btn:hover { filter: brightness(0.96) !important; }
+
+/* Forms */
+.form-group input,
+.form-group select,
+.form-group textarea {
+  background: #ffffff !important;
+  border: 1px solid var(--c-border) !important;
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: var(--c-primary) !important;
+  box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.1) !important;
+}
+
+/* Tables */
+.table th { background: #f9fafb !important; color: var(--c-text) !important; }
+.table td, .table th { border-bottom: 1px solid var(--c-border) !important; }
+
+/* Sections */
+.features-section,
+.quick-actions-section,
+.scientific-features-section,
+.api-integration-section {
+  background: #ffffff !important;
+  padding: 2rem 0 !important;
+}
+
+/* Home page headings: enforce dark text on white */
+.analysis-title h5,
+.batch-title h5,
+.api-card .api-header h5,
+.api-description,
+.api-endpoints-title {
+  color: #111827 !important;
+}
+.api-card { color: #111827 !important; }
+.api-card .api-header { color: #111827 !important; background: #f8fafc !important; }
+.analysis-card .card-header,
+.batch-card .card-header { background: #f8fafc !important; color: #111827 !important; }
+.analysis-title p,
+.batch-title p { color: #6b7280 !important; }
+
+/* API Docs page - light theme with purple accents */
+.api-docs-page {
+  background: #ffffff !important;
+}
+.api-docs-page .card {
+  background: #ffffff !important;
+  border: 1px solid var(--c-border) !important;
+}
+.api-docs-page .card, .api-docs-page p, .api-docs-page li, .api-docs-page h5, .api-docs-page h6, .api-docs-page .nav .nav-link {
+  color: #111827 !important;
+}
+.api-docs-page .nav .nav-link { background: transparent !important; }
+.api-docs-page .api-hero-card {
+  background: linear-gradient(135deg, #6d28d9 0%, #7c3aed 60%, #a78bfa 100%) !important;
+  border: none !important;
+  border-radius: 16px !important;
+  overflow: hidden !important;
+  box-shadow: 0 12px 40px rgba(109, 40, 217, 0.15) !important;
+}
+.api-docs-page .api-hero-header {
+  color: #ffffff !important;
+  padding: 2rem 1.5rem !important;
+}
+.api-docs-page .api-hero-header h4 {
+  font-weight: 700 !important;
+}
+.api-docs-page .api-hero-header p {
+  opacity: 0.95 !important;
+}
+.api-docs-page .card-header.bg-primary,
+.api-docs-page .card-header.bg-info,
+.api-docs-page .card-header.bg-success,
+.api-docs-page .card-header.bg-warning,
+.api-docs-page .card-header.bg-danger,
+.api-docs-page .card-header.bg-secondary {
+  background: linear-gradient(135deg, #6d28d9 0%, #8b5cf6 100%) !important;
+  color: #ffffff !important;
+  border-bottom: 1px solid var(--c-border) !important;
+}
+.api-docs-page code {
+  background: #f3f4f6 !important;
+  color: #111827 !important;
+  padding: 2px 6px !important;
+  border-radius: 6px !important;
+  border: 1px solid #e5e7eb !important;
+}
+.api-docs-page .endpoint-chip {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  background: #f5f3ff !important;
+  color: #4c1d95 !important;
+  border: 1px solid #e9d5ff !important;
+  border-radius: 999px !important;
+  padding: 6px 12px !important;
+  font-weight: 600 !important;
+}
+.api-docs-page .endpoint-chip::before {
+  content: '\f481'; /* fa-code icon */
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  color: #6d28d9;
+}
+.api-docs-page pre code {
+  display: block !important;
+  background: #0b1020 !important;
+  color: #e5e7eb !important;
+  border-radius: 10px !important;
+  border: 1px solid #111827 !important;
+}
+.api-docs-page pre {
+  position: relative !important;
+}
+.api-docs-page .copy-btn {
+  position: absolute !important;
+  top: 10px !important;
+  right: 10px !important;
+  background: #111827 !important;
+  color: #e5e7eb !important;
+  border: 1px solid #374151 !important;
+  border-radius: 8px !important;
+  font-size: 0.75rem !important;
+  padding: 6px 10px !important;
+  cursor: pointer !important;
+}
+.api-docs-page .nav .nav-link {
+  color: #6b7280 !important;
+}
+.api-docs-page .nav .nav-link:hover {
+  color: #6d28d9 !important;
+  background: #f5f3ff !important;
+}
+.api-docs-page .nav .nav-link.active {
+  color: #4c1d95 !important;
+  background: #ede9fe !important;
+  border-left: 3px solid #6d28d9 !important;
+}
+.api-docs-page .sticky-top {
+  top: 90px !important;
+}
+
+/* Make test JSON responses black on white without affecting code samples */
+.api-docs-page div.bg-dark.text-light {
+  background: #ffffff !important;
+  color: #111827 !important;
+}
+.api-docs-page div.bg-dark.text-light pre {
+  background: transparent !important;
+  color: #111827 !important;
+}
+
+/* Footer */
+.footer-purple {
+  background: linear-gradient(135deg, #8145F0 0%, #6B2FDB 30%, #5B21B6 70%, #4C1D95 100%) !important;
+  color: #ffffff !important;
+  border-top: none !important;
+}
+.footer-title, .footer-heading, .footer-version { color: #ffffff !important; text-shadow: none !important; }
+.footer-description, .footer-links a, .footer-copyright { color: rgba(255,255,255,0.9) !important; }
+.footer-links a:hover { color: #ffffff !important; transform: none !important; }
+.social-link { background: rgba(255,255,255,0.15) !important; border: 1px solid rgba(255,255,255,0.25) !important; color: #ffffff !important; box-shadow: none !important; }
+.social-link:hover { background: rgba(255,255,255,0.25) !important; color: #ffffff !important; }
+
+/* Reduce animations and transitions for simplicity */
+* { transition: none !important; animation: none !important; }
+
+/* Mobile tweaks */
+@media (max-width: 768px) {
+  .hero-title { font-size: 1.75rem !important; }
+  .hero-subtitle { font-size: 1rem !important; }
+}
+
+
