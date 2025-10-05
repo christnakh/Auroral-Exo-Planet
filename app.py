@@ -667,8 +667,81 @@ def detect_anomalies(features: np.ndarray) -> Dict[str, Any]:
             'confidence': 0.0
         }
 
+# Check if models exist and train if necessary
+def check_and_train_models():
+    """Check if models exist, if not run all model training scripts"""
+    models_dir = "models/trained_models"
+    required_models = [
+        "xgboost_model.pkl",
+        "random_forest_model.pkl", 
+        "scaler.pkl",
+        "label_encoder.pkl"
+    ]
+    
+    # Check if all required models exist
+    models_exist = all(os.path.exists(os.path.join(models_dir, model)) for model in required_models)
+    
+    if not models_exist:
+        print("🔧 Models not found. Training all models...")
+        print("="*60)
+        
+        # List of training scripts to try in order
+        training_scripts = [
+            "run_all_models.py",
+            "improve_model_accuracy.py",
+            "models/ml_models/model_training.py"
+        ]
+        
+        success = False
+        for script in training_scripts:
+            if os.path.exists(script):
+                print(f"🚀 Running {script}...")
+                try:
+                    import subprocess
+                    result = subprocess.run([sys.executable, script], 
+                                          capture_output=True, text=True, timeout=1800)  # 30 min timeout
+                    
+                    if result.returncode == 0:
+                        print(f"✅ {script} completed successfully!")
+                        print("📊 Training output:")
+                        print(result.stdout[-1000:])  # Show last 1000 chars
+                        success = True
+                        break
+                    else:
+                        print(f"❌ {script} failed!")
+                        print("Error output:")
+                        print(result.stderr[-500:])  # Show last 500 chars
+                        
+                except subprocess.TimeoutExpired:
+                    print(f"⏰ {script} timed out (30 minutes)")
+                except Exception as e:
+                    print(f"❌ Error running {script}: {e}")
+            else:
+                print(f"⚠️  {script} not found, trying next...")
+        
+        if not success:
+            print("❌ All training scripts failed!")
+            return False
+        
+        # Verify models were created after training
+        models_exist_after = all(os.path.exists(os.path.join(models_dir, model)) for model in required_models)
+        if not models_exist_after:
+            print("❌ Models still not found after training!")
+            return False
+            
+    else:
+        print("✅ All required models found!")
+    
+    return True
+
 # Initialize models on startup
 print("🔭 Initializing Exoplanet Analysis System...")
+print("🔍 Checking for trained models...")
+
+if not check_and_train_models():
+    print("❌ Failed to train models. Please check the training scripts.")
+    sys.exit(1)
+
 if not load_models():
     print("❌ Failed to load models. Please ensure models are trained first.")
     sys.exit(1)
