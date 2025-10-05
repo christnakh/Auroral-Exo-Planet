@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔭 Quick Test - Exoplanet Classification</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        .test-button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 10px;
+            font-size: 16px;
+        }
+        .test-button:hover {
+            background: #5a6fd8;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        .prediction {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        .confidence {
+            font-size: 18px;
+            color: #666;
+        }
+        .probabilities {
+            margin-top: 15px;
+        }
+        .prob-bar {
+            display: flex;
+            align-items: center;
+            margin: 8px 0;
+        }
+        .prob-label {
+            width: 120px;
+            font-weight: 600;
+        }
+        .prob-value {
+            flex: 1;
+            background: #e1e5e9;
+            height: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 0 10px;
+        }
+        .prob-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.5s ease;
+        }
+        .prob-percent {
+            width: 50px;
+            text-align: right;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔭 Quick Test - Exoplanet Classification</h1>
+        <p>Test your exoplanet classification system with real data</p>
+        
+        <div>
+            <button class="test-button" onclick="testCandidate()">Test Good Candidate</button>
+            <button class="test-button" onclick="testConfirmed()">Test Confirmed</button>
+            <button class="test-button" onclick="testFalsePositive()">Test False Positive</button>
+        </div>
+        
+        <div id="result" class="result" style="display: none;">
+            <h3>Classification Result</h3>
+            <div id="prediction" class="prediction"></div>
+            <div id="confidence" class="confidence"></div>
+            <div id="probabilities" class="probabilities"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8000';
+        
+        const testData = {
+            candidate: {
+                period: 15.0,
+                duration: 3.0,
+                depth: 2000.0,
+                planet_radius: 2.0,
+                stellar_radius: 1.0,
+                stellar_temp: 5800,
+                stellar_mag: 12.0,
+                impact_param: 0.5,
+                transit_snr: 50.0,
+                num_transits: 10,
+                duty_cycle: 0.1
+            },
+            confirmed: {
+                period: 365.0,
+                duration: 0.1,
+                depth: 0.01,
+                planet_radius: 1.0,
+                stellar_radius: 1.0,
+                stellar_temp: 5800,
+                stellar_mag: 12.0,
+                impact_param: 0.5,
+                transit_snr: 50.0,
+                num_transits: 10,
+                duty_cycle: 0.1
+            },
+            false_positive: {
+                period: 0.8,
+                duration: 0.005,
+                depth: 0.35,
+                planet_radius: 0.3,
+                stellar_radius: 1.8,
+                stellar_temp: 8000,
+                stellar_mag: 5.2,
+                impact_param: 0.5,
+                transit_snr: 50.0,
+                num_transits: 10,
+                duty_cycle: 0.1
+            }
+        };
+        
+        async function testClassification(type) {
+            try {
+                const response = await fetch(`${API_BASE}/api/analyze`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(testData[type])
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                
+                // Display results
+                document.getElementById('prediction').textContent = `Prediction: ${result.classification.prediction}`;
+                document.getElementById('confidence').textContent = `Confidence: ${(result.classification.confidence * 100).toFixed(1)}%`;
+                
+                // Display probabilities
+                const probContainer = document.getElementById('probabilities');
+                probContainer.innerHTML = '<h4>Probabilities:</h4>';
+                
+                Object.entries(result.classification.probabilities).forEach(([class_name, prob]) => {
+                    const probDiv = document.createElement('div');
+                    probDiv.className = 'prob-bar';
+                    probDiv.innerHTML = `
+                        <div class="prob-label">${class_name}:</div>
+                        <div class="prob-value">
+                            <div class="prob-fill" style="width: ${prob * 100}%"></div>
+                        </div>
+                        <div class="prob-percent">${(prob * 100).toFixed(1)}%</div>
+                    `;
+                    probContainer.appendChild(probDiv);
+                });
+                
+                document.getElementById('result').style.display = 'block';
+                
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error testing classification. Make sure the Flask app is running on port 8000.');
+            }
+        }
+        
+        function testCandidate() {
+            testClassification('candidate');
+        }
+        
+        function testConfirmed() {
+            testClassification('confirmed');
+        }
+        
+        function testFalsePositive() {
+            testClassification('false_positive');
+        }
+    </script>
+</body>
+</html>
