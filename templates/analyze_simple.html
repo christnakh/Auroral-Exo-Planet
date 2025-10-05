@@ -1,0 +1,577 @@
+{% extends "base.html" %}
+
+{% block title %}🔭 Simple Analysis - AurOracle{% endblock %}
+
+{% block content %}
+<div class="simple-analyze-page">
+    <div class="container">
+
+        <!-- Form -->
+        <div class="form-container">
+            <form id="analysisForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Orbital Period (days)</label>
+                        <input type="number" id="orbital_period" placeholder="e.g., 365.25" step="any" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Planet Radius (Earth radii)</label>
+                        <input type="number" id="planet_radius" placeholder="e.g., 1.0" step="any" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Stellar Temperature (K)</label>
+                        <input type="number" id="stellar_temp" placeholder="e.g., 5778" step="any" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Stellar Radius (Solar radii)</label>
+                        <input type="number" id="stellar_radius" placeholder="e.g., 1.0" step="any" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Stellar Magnitude</label>
+                        <input type="number" id="stellar_mag" placeholder="e.g., 12.0" step="any" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Transit Depth</label>
+                        <input type="number" id="transit_depth" placeholder="e.g., 0.01" step="any" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Transit Duration (days)</label>
+                        <input type="number" id="transit_duration" placeholder="e.g., 0.1" step="any" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Impact Parameter</label>
+                        <input type="number" id="impact_param" placeholder="e.g., 0.5" step="any" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Transit SNR</label>
+                        <input type="number" id="transit_snr" placeholder="e.g., 50" step="any" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Number of Transits</label>
+                        <input type="number" id="num_transits" placeholder="e.g., 10" step="any" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Duty Cycle</label>
+                        <input type="number" id="duty_cycle" placeholder="e.g., 0.1" step="any" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Stellar Mass (Solar masses)</label>
+                        <input type="number" id="stellar_mass" placeholder="e.g., 1.0" step="any" required>
+                    </div>
+                </div>
+
+                <!-- Test Buttons -->
+                <div class="test-buttons">
+                    <button type="button" onclick="loadTestData('candidate')" class="test-btn candidate">Test Candidate</button>
+                    <button type="button" onclick="loadTestData('confirmed')" class="test-btn confirmed">Test Confirmed</button>
+                    <button type="button" onclick="loadTestData('false_positive')" class="test-btn false-positive">Test False Positive</button>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="submit-section">
+                    <button type="submit" class="analyze-btn">
+                        <span class="btn-text">Analyze Exoplanet</span>
+                        <span class="btn-icon">🚀</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Results -->
+        <div id="results" class="results-container" style="display: none;">
+            <div class="result-card">
+                <h2>Analysis Results</h2>
+                
+                <div class="result-main">
+                    <div class="prediction">
+                        <span class="label">Prediction:</span>
+                        <span id="prediction" class="value"></span>
+                    </div>
+                    <div class="confidence">
+                        <span class="label">Confidence:</span>
+                        <span id="confidence" class="value"></span>
+                    </div>
+                </div>
+
+                <div class="probabilities">
+                    <h3>Probabilities</h3>
+                    <div class="prob-bar">
+                        <span class="prob-label">Candidate:</span>
+                        <div class="prob-container">
+                            <div class="prob-fill" id="prob-candidate"></div>
+                            <span class="prob-text" id="prob-candidate-text"></span>
+                        </div>
+                    </div>
+                    <div class="prob-bar">
+                        <span class="prob-label">Confirmed:</span>
+                        <div class="prob-container">
+                            <div class="prob-fill" id="prob-confirmed"></div>
+                            <span class="prob-text" id="prob-confirmed-text"></span>
+                        </div>
+                    </div>
+                    <div class="prob-bar">
+                        <span class="prob-label">False Positive:</span>
+                        <div class="prob-container">
+                            <div class="prob-fill" id="prob-false-positive"></div>
+                            <span class="prob-text" id="prob-false-positive-text"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading -->
+        <div id="loading" class="loading-container" style="display: none;">
+            <div class="loading-spinner"></div>
+            <p>Analyzing exoplanet...</p>
+        </div>
+
+        <!-- Error -->
+        <div id="error" class="error-container" style="display: none;">
+            <div class="error-message">
+                <h3>❌ Analysis Failed</h3>
+                <p id="error-text"></p>
+                <button onclick="retryAnalysis()" class="retry-btn">Try Again</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Simple Clean Design */
+.simple-analyze-page {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 2rem 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+
+/* Form */
+.form-container {
+    background: white;
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    margin-bottom: 2rem;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+.form-group input {
+    padding: 0.75rem;
+    border: 2px solid #e1e5e9;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+/* Test Buttons */
+.test-buttons {
+    display: flex;
+    gap: 1rem;
+    margin: 2rem 0;
+    justify-content: center;
+}
+
+.test-btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 25px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.test-btn.candidate {
+    background: #ffc107;
+    color: #000;
+}
+
+.test-btn.confirmed {
+    background: #28a745;
+    color: white;
+}
+
+.test-btn.false-positive {
+    background: #dc3545;
+    color: white;
+}
+
+.test-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* Submit Button */
+.submit-section {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+.analyze-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0 auto;
+}
+
+.analyze-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+}
+
+/* Results */
+.results-container {
+    background: white;
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    margin-bottom: 2rem;
+}
+
+.result-card h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #333;
+}
+
+.result-main {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 10px;
+}
+
+.prediction, .confidence {
+    text-align: center;
+}
+
+.label {
+    display: block;
+    font-weight: 600;
+    color: #666;
+    margin-bottom: 0.5rem;
+}
+
+.value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #333;
+}
+
+/* Probabilities */
+.probabilities h3 {
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+.prob-bar {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.prob-label {
+    width: 120px;
+    font-weight: 600;
+    color: #333;
+}
+
+.prob-container {
+    flex: 1;
+    position: relative;
+    background: #e1e5e9;
+    height: 25px;
+    border-radius: 12px;
+    overflow: hidden;
+    margin: 0 1rem;
+}
+
+.prob-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    border-radius: 12px;
+    transition: width 0.5s ease;
+}
+
+.prob-text {
+    font-weight: 600;
+    color: #333;
+    min-width: 50px;
+    text-align: right;
+}
+
+/* Loading */
+.loading-container {
+    text-align: center;
+    background: white;
+    border-radius: 20px;
+    padding: 3rem;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+}
+
+.loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid #e1e5e9;
+    border-top: 4px solid #667eea;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 1rem;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Error */
+.error-container {
+    background: white;
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.error-message h3 {
+    color: #dc3545;
+    margin-bottom: 1rem;
+}
+
+.retry-btn {
+    background: #667eea;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .test-buttons {
+        flex-direction: column;
+    }
+    
+    .result-main {
+        grid-template-columns: 1fr;
+    }
+    
+}
+</style>
+
+<script>
+// Test data
+const testData = {
+    candidate: {
+        orbital_period: 15.0,
+        planet_radius: 2.0,
+        stellar_temp: 5800,
+        stellar_radius: 1.0,
+        stellar_mag: 12.0,
+        transit_depth: 0.002,
+        transit_duration: 0.125,
+        impact_param: 0.5,
+        transit_snr: 50.0,
+        num_transits: 10,
+        duty_cycle: 0.1,
+        stellar_mass: 1.0
+    },
+    confirmed: {
+        orbital_period: 365.25,
+        planet_radius: 1.0,
+        stellar_temp: 5778,
+        stellar_radius: 1.0,
+        stellar_mag: 12.0,
+        transit_depth: 0.01,
+        transit_duration: 0.1,
+        impact_param: 0.5,
+        transit_snr: 50.0,
+        num_transits: 10,
+        duty_cycle: 0.1,
+        stellar_mass: 1.0
+    },
+    false_positive: {
+        orbital_period: 0.8,
+        planet_radius: 0.3,
+        stellar_temp: 8000,
+        stellar_radius: 1.8,
+        stellar_mag: 5.2,
+        transit_depth: 0.35,
+        transit_duration: 0.005,
+        impact_param: 0.5,
+        transit_snr: 50.0,
+        num_transits: 10,
+        duty_cycle: 0.1,
+        stellar_mass: 1.0
+    }
+};
+
+// Load test data
+function loadTestData(type) {
+    const data = testData[type];
+    Object.keys(data).forEach(key => {
+        const input = document.getElementById(key);
+        if (input) {
+            input.value = data[key];
+        }
+    });
+}
+
+// Form submission
+document.getElementById('analysisForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    // Show loading
+    document.getElementById('loading').style.display = 'block';
+    document.getElementById('results').style.display = 'none';
+    document.getElementById('error').style.display = 'none';
+    
+    // Get form data
+    const formData = {
+        period: parseFloat(document.getElementById('orbital_period').value),
+        duration: parseFloat(document.getElementById('transit_duration').value),
+        depth: parseFloat(document.getElementById('transit_depth').value),
+        planet_radius: parseFloat(document.getElementById('planet_radius').value),
+        stellar_radius: parseFloat(document.getElementById('stellar_radius').value),
+        stellar_temp: parseFloat(document.getElementById('stellar_temp').value),
+        stellar_mag: parseFloat(document.getElementById('stellar_mag').value),
+        impact_param: parseFloat(document.getElementById('impact_param').value),
+        transit_snr: parseFloat(document.getElementById('transit_snr').value),
+        num_transits: parseFloat(document.getElementById('num_transits').value),
+        duty_cycle: parseFloat(document.getElementById('duty_cycle').value)
+    };
+    
+    try {
+        const response = await fetch('/api/analyze', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData)
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const result = await response.json();
+        
+        // Hide loading
+        document.getElementById('loading').style.display = 'none';
+        
+        // Show results
+        displayResults(result);
+        
+    } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('error').style.display = 'block';
+        document.getElementById('error-text').textContent = error.message;
+    }
+});
+
+// Display results
+function displayResults(data) {
+    const classification = data.classification;
+    
+    // Main results
+    document.getElementById('prediction').textContent = classification.prediction;
+    document.getElementById('confidence').textContent = `${(classification.confidence * 100).toFixed(1)}%`;
+    
+    // Probabilities
+    const probabilities = classification.probabilities;
+    
+    // Candidate
+    const candidateProb = probabilities.candidate * 100;
+    document.getElementById('prob-candidate').style.width = `${candidateProb}%`;
+    document.getElementById('prob-candidate-text').textContent = `${candidateProb.toFixed(1)}%`;
+    
+    // Confirmed
+    const confirmedProb = probabilities.confirmed * 100;
+    document.getElementById('prob-confirmed').style.width = `${confirmedProb}%`;
+    document.getElementById('prob-confirmed-text').textContent = `${confirmedProb.toFixed(1)}%`;
+    
+    // False Positive
+    const falsePositiveProb = probabilities.false_positive * 100;
+    document.getElementById('prob-false-positive').style.width = `${falsePositiveProb}%`;
+    document.getElementById('prob-false-positive-text').textContent = `${falsePositiveProb.toFixed(1)}%`;
+    
+    // Show results
+    document.getElementById('results').style.display = 'block';
+}
+
+// Retry function
+function retryAnalysis() {
+    document.getElementById('error').style.display = 'none';
+    document.getElementById('analysisForm').dispatchEvent(new Event('submit'));
+}
+</script>
+{% endblock %}

@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}💬 Exoplanet Chat - AurOracle{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0"><i class="fas fa-comments me-2"></i>Exoplanet Chatbot</h5>
+        </div>
+        <div class="card-body">
+            <div id="chatWindow" style="height: 420px; overflow-y: auto; border: 1px solid #e5e7eb; border-radius: 8px; padding: 12px; background: #ffffff;">
+                <div class="text-muted mb-2">Assistant is limited to exoplanet topics and project.</div>
+            </div>
+            <div class="mt-3 d-flex gap-2">
+                <input id="chatInput" type="text" class="form-control" placeholder="Ask about exoplanets, Kepler/TESS, habitability..." />
+                <button class="btn primary-btn" onclick="sendChat()"><i class="fas fa-paper-plane me-1"></i>Send</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+const history = [];
+
+function addMessage(role, content) {
+    const win = document.getElementById('chatWindow');
+    const wrapper = document.createElement('div');
+    wrapper.className = role === 'user' ? 'mb-2 text-end' : 'mb-2 text-start';
+    const bubble = document.createElement('div');
+    bubble.style.display = 'inline-block';
+    bubble.style.padding = '8px 12px';
+    bubble.style.borderRadius = '12px';
+    bubble.style.maxWidth = '85%';
+    if (role === 'user') {
+        bubble.style.background = '#ede9fe';
+        bubble.style.color = '#111827';
+    } else {
+        bubble.style.background = '#f3f4f6';
+        bubble.style.color = '#111827';
+    }
+    bubble.textContent = content;
+    wrapper.appendChild(bubble);
+    win.appendChild(wrapper);
+    win.scrollTop = win.scrollHeight;
+}
+
+async function sendChat() {
+    const input = document.getElementById('chatInput');
+    const text = input.value.trim();
+    if (!text) return;
+    addMessage('user', text);
+    history.push({ role: 'user', content: text });
+    input.value = '';
+    try {
+        const resp = await fetch('/api/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: text, history })
+        });
+        const data = await resp.json();
+        const reply = data.reply || data.error || 'No reply';
+        addMessage('assistant', reply);
+        history.push({ role: 'assistant', content: reply });
+    } catch (e) {
+        addMessage('assistant', 'Error contacting chatbot API.');
+    }
+}
+
+document.getElementById('chatInput').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+        sendChat();
+    }
+});
+</script>
+{% endblock %}
+
+

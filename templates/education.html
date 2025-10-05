@@ -1,0 +1,378 @@
+{% extends "base.html" %}
+
+{% block title %}🎓 Education - ExoplanetML{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-5 mt-5">
+    <!-- Education Hero Section -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="hero-section">
+                <div class="container">
+                    <div class="row align-items-center min-vh-100">
+                        <div class="col-lg-8">
+                            <h1 class="display-4 fw-bold mb-4 animate-fadeInUp">
+                                🎓 Exoplanet Education Center
+                            </h1>
+                            <p class="lead mb-4 animate-fadeInUp" style="animation-delay: 0.2s;">
+                                Learn about exoplanet discovery, machine learning in astronomy, 
+                                and the science behind our advanced analysis system.
+                            </p>
+                            <div class="d-flex gap-3 animate-fadeInUp" style="animation-delay: 0.4s;">
+                                <a href="#basics" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-book me-2"></i>Start Learning
+                                </a>
+                                <a href="{{ url_for('analyze') }}" class="btn btn-outline-primary btn-lg">
+                                    <i class="fas fa-rocket me-2"></i>Try Analysis
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="text-center animate-fadeInRight">
+                                <i class="fas fa-graduation-cap" style="font-size: 8rem; color: var(--primary-purple);"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+					</div>
+				</div>
+			</div>
+
+    <!-- Learning Modules -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card bg-dark border-primary">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-book-open me-2"></i>
+                        Learning Modules
+                    </h4>
+                </div>
+                <div class="card-body">
+			<div class="row">
+                        <div class="col-lg-4 mb-4">
+                            <div class="card bg-dark border-info h-100">
+                                <div class="card-header bg-info text-white">
+                                    <h5 class="mb-0">
+                                        <i class="fas fa-globe me-2"></i>
+                                        Exoplanet Basics
+                                    </h5>
+                                </div>
+                                <div class="card-body">
+                                    <p class="text-muted">
+                                        Learn the fundamentals of exoplanet science, discovery methods, 
+                                        and what makes a planet potentially habitable.
+                                    </p>
+                                    <ul class="list-unstyled small text-muted">
+                                        <li>• What are exoplanets?</li>
+                                        <li>• Discovery methods (transit, radial velocity)</li>
+                                        <li>• Habitable zones</li>
+                                        <li>• Planetary characteristics</li>
+                                    </ul>
+                                    <div class="d-grid">
+                                        <button class="btn btn-outline-info" onclick="showModule('basics')">
+                                            <i class="fas fa-play me-2"></i>Start Module
+                                        </button>
+                                    </div>
+                                </div>
+				</div>
+				</div>
+
+                        <div class="col-lg-4 mb-4">
+                            <div class="card bg-dark border-success h-100">
+                                <div class="card-header bg-success text-white">
+                                    <h5 class="mb-0">
+                                        <i class="fas fa-robot me-2"></i>
+                                        Machine Learning in Astronomy
+                                    </h5>
+                                </div>
+                                <div class="card-body">
+                                    <p class="text-muted">
+                                        Understand how machine learning is revolutionizing 
+                                        exoplanet discovery and analysis.
+                                    </p>
+                                    <ul class="list-unstyled small text-muted">
+                                        <li>• Classification algorithms</li>
+                                        <li>• Neural networks for light curves</li>
+                                        <li>• Feature engineering</li>
+                                        <li>• Model validation</li>
+                                    </ul>
+                                    <div class="d-grid">
+                                        <button class="btn btn-outline-success" onclick="showModule('ml')">
+                                            <i class="fas fa-play me-2"></i>Start Module
+                                        </button>
+                                    </div>
+                                </div>
+			</div>
+		</div>
+
+                        <div class="col-lg-4 mb-4">
+                            <div class="card bg-dark border-warning h-100">
+                                <div class="card-header bg-warning text-dark">
+                                    <h5 class="mb-0">
+                                        <i class="fas fa-microscope me-2"></i>
+                                        Scientific Analysis
+                                    </h5>
+                    </div>
+                                <div class="card-body">
+                                    <p class="text-muted">
+                                        Explore the scientific methods and tools used 
+                                        in our exoplanet analysis system.
+                                    </p>
+                                    <ul class="list-unstyled small text-muted">
+                                        <li>• Habitability calculations</li>
+                                        <li>• Anomaly detection</li>
+                                        <li>• Statistical analysis</li>
+                                        <li>• Cross-mission validation</li>
+                                    </ul>
+                                    <div class="d-grid">
+                                        <button class="btn btn-outline-warning" onclick="showModule('science')">
+                                            <i class="fas fa-play me-2"></i>Start Module
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Interactive Learning Content -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card bg-dark border-secondary">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-chalkboard-teacher me-2"></i>
+                        Interactive Learning
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div id="learning-content">
+                        <div class="text-center">
+                            <i class="fas fa-graduation-cap fa-3x text-primary mb-3"></i>
+                            <h4 class="text-primary">Choose a Learning Module</h4>
+                            <p class="text-muted">Select one of the modules above to start your educational journey</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+							</div>
+					</div>
+					
+    <!-- Exoplanet Discovery Timeline -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card bg-dark border-info">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-timeline me-2"></i>
+                        Exoplanet Discovery Timeline
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-marker bg-primary"></div>
+                            <div class="timeline-content">
+                                <h6 class="text-primary">1995 - First Exoplanet</h6>
+                                <p class="text-muted small">51 Pegasi b discovered using radial velocity method</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-marker bg-success"></div>
+                            <div class="timeline-content">
+                                <h6 class="text-success">2009 - Kepler Mission</h6>
+                                <p class="text-muted small">NASA's Kepler space telescope launched, discovering thousands of exoplanets</p>
+				</div>
+						</div>
+                        <div class="timeline-item">
+                            <div class="timeline-marker bg-warning"></div>
+                            <div class="timeline-content">
+                                <h6 class="text-warning">2018 - TESS Mission</h6>
+                                <p class="text-muted small">Transiting Exoplanet Survey Satellite begins all-sky survey</p>
+					</div>
+				</div>
+                        <div class="timeline-item">
+                            <div class="timeline-marker bg-info"></div>
+                            <div class="timeline-content">
+                                <h6 class="text-info">2024 - AI Revolution</h6>
+                                <p class="text-muted small">Machine learning transforms exoplanet discovery and analysis</p>
+					</div>						
+						</div>
+			</div>
+					</div>
+				</div>
+			</div>
+					</div>						
+				
+    <!-- Key Concepts -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card bg-dark border-primary">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-lightbulb me-2"></i>
+                        Key Concepts
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="text-primary">Discovery Methods</h6>
+                            <ul class="list-unstyled small text-muted">
+                                <li>• <strong>Transit Method:</strong> Detects planets as they pass in front of their star</li>
+                                <li>• <strong>Radial Velocity:</strong> Measures star's wobble caused by orbiting planets</li>
+                                <li>• <strong>Direct Imaging:</strong> Takes pictures of planets directly</li>
+                                <li>• <strong>Gravitational Microlensing:</strong> Uses light bending to detect planets</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-primary">Planetary Characteristics</h6>
+                            <ul class="list-unstyled small text-muted">
+                                <li>• <strong>Size:</strong> From Earth-sized to gas giants</li>
+                                <li>• <strong>Composition:</strong> Rocky, gaseous, or ice worlds</li>
+                                <li>• <strong>Orbit:</strong> Distance from star affects temperature</li>
+                                <li>• <strong>Atmosphere:</strong> Key to habitability assessment</li>
+                            </ul>
+			</div>
+					</div>
+				</div>
+			</div>
+			</div>
+						</div>
+				
+    <!-- Resources -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card bg-dark border-success">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-external-link-alt me-2"></i>
+                        Additional Resources
+                    </h5>
+			</div>
+                <div class="card-body">
+				<div class="row">
+                        <div class="col-md-4">
+                            <div class="text-center">
+                                <i class="fas fa-satellite fa-3x text-info mb-3"></i>
+                                <h6 class="text-info">NASA Exoplanet Archive</h6>
+                                <p class="text-muted small">Official database of confirmed exoplanets</p>
+                                <a href="https://exoplanetarchive.ipac.caltech.edu/" target="_blank" class="btn btn-outline-info btn-sm">
+                                    <i class="fas fa-external-link-alt me-1"></i>Visit
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="text-center">
+                                <i class="fas fa-book fa-3x text-warning mb-3"></i>
+                                <h6 class="text-warning">Scientific Papers</h6>
+                                <p class="text-muted small">Latest research in exoplanet science</p>
+                                <a href="https://arxiv.org/list/astro-ph.EP/recent" target="_blank" class="btn btn-outline-warning btn-sm">
+                                    <i class="fas fa-external-link-alt me-1"></i>Browse
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="text-center">
+                                <i class="fas fa-graduation-cap fa-3x text-primary mb-3"></i>
+                                <h6 class="text-primary">Online Courses</h6>
+                                <p class="text-muted small">Learn astronomy and exoplanet science</p>
+                                <a href="https://www.coursera.org/learn/astrobiology" target="_blank" class="btn btn-outline-primary btn-sm">
+                                    <i class="fas fa-external-link-alt me-1"></i>Enroll
+                                </a>
+                            </div>
+                        </div>
+					</div>
+					</div>
+				</div>
+			</div>
+					</div>						
+						</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+// Learning module content
+const modules = {
+    basics: {
+        title: "Exoplanet Basics",
+        content: `
+            <h4 class="text-primary">What are Exoplanets?</h4>
+            <p>Exoplanets are planets that orbit stars other than our Sun. Since the first discovery in 1995, we've found over 5,000 confirmed exoplanets.</p>
+            
+            <h5 class="text-info mt-4">Discovery Methods</h5>
+				<div class="row">
+                <div class="col-md-6">
+                    <h6>Transit Method</h6>
+                    <p class="small">Detects planets as they pass in front of their star, causing a small dip in brightness.</p>
+					</div>
+                <div class="col-md-6">
+                    <h6>Radial Velocity</h6>
+                    <p class="small">Measures the star's wobble caused by the gravitational pull of orbiting planets.</p>
+				</div>
+			</div>
+            
+            <h5 class="text-success mt-4">Habitable Zones</h5>
+            <p>The habitable zone is the region around a star where liquid water could exist on a planet's surface - a key ingredient for life as we know it.</p>
+        `
+    },
+    ml: {
+        title: "Machine Learning in Astronomy",
+        content: `
+            <h4 class="text-primary">AI Revolution in Exoplanet Discovery</h4>
+            <p>Machine learning is transforming how we discover and analyze exoplanets, making the process faster and more accurate.</p>
+            
+            <h5 class="text-info mt-4">Key Applications</h5>
+            <ul>
+                <li><strong>Classification:</strong> Distinguishing real planets from false positives</li>
+                <li><strong>Light Curve Analysis:</strong> Detecting subtle transit signals</li>
+                <li><strong>Feature Engineering:</strong> Extracting meaningful patterns from data</li>
+                <li><strong>Anomaly Detection:</strong> Finding unusual planetary systems</li>
+			</ul>
+            
+            <h5 class="text-success mt-4">Our Models</h5>
+            <p>Our system uses XGBoost, Random Forest, and Convolutional Neural Networks to achieve 83.5% accuracy in exoplanet classification.</p>
+        `
+    },
+    science: {
+        title: "Scientific Analysis Methods",
+        content: `
+            <h4 class="text-primary">Scientific Analysis in Our System</h4>
+            <p>Our platform combines multiple scientific approaches to provide comprehensive exoplanet analysis.</p>
+            
+            <h5 class="text-info mt-4">Habitability Analysis</h5>
+            <p>We calculate habitability scores based on planetary size, stellar characteristics, and orbital parameters.</p>
+            
+            <h5 class="text-warning mt-4">Anomaly Detection</h5>
+            <p>Using Isolation Forest algorithms to identify unusual planetary systems that warrant further investigation.</p>
+            
+            <h5 class="text-success mt-4">Cross-Mission Validation</h5>
+            <p>Ensuring our models work consistently across different space missions and instruments.</p>
+        `
+    }
+};
+
+function showModule(moduleId) {
+    const content = document.getElementById('learning-content');
+    const module = modules[moduleId];
+    
+    if (module) {
+        content.innerHTML = `
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h4 class="text-primary mb-0">${module.title}</h4>
+                <button class="btn btn-outline-secondary btn-sm" onclick="showModule('')">
+                    <i class="fas fa-times me-1"></i>Close
+                </button>
+            </div>
+            <div class="module-content">
+                ${module.content}
+            </div>
+        `;
+    }
+}
+</script>
+{% endblock %}

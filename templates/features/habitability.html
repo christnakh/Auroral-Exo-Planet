@@ -1,0 +1,527 @@
+{% extends "base.html" %}
+
+{% block title %}🌍 Habitability Analysis - ExoplanetML{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-5 mt-5">
+    <!-- Habitability Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card bg-dark border-success">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-leaf me-2"></i>
+                        Habitability Analysis System
+                    </h4>
+                    <p class="mb-0 mt-2">Advanced planetary habitability assessment using multiple scientific criteria</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Habitability Calculator -->
+    <div class="row mb-4">
+        <div class="col-lg-6">
+            <div class="card bg-dark border-primary">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-calculator me-2"></i>
+                        Habitability Calculator
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form id="habitabilityForm">
+                        <div class="mb-3">
+                            <label for="habPlanetRadius" class="form-label">
+                                <i class="fas fa-globe me-1"></i>Planet Radius (Earth radii)
+                            </label>
+                            <input type="number" class="form-control" id="habPlanetRadius" 
+                                   value="1.0" min="0.1" max="50" step="0.1">
+                            <div class="form-text">Earth = 1.0, optimal range: 0.8-1.4</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="habStellarTemp" class="form-label">
+                                <i class="fas fa-sun me-1"></i>Stellar Temperature (K)
+                            </label>
+                            <input type="number" class="form-control" id="habStellarTemp" 
+                                   value="5800" min="2000" max="10000" step="100">
+                            <div class="form-text">Sun = 5778 K, optimal range: 5000-6500 K</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="habStellarRadius" class="form-label">
+                                <i class="fas fa-circle me-1"></i>Stellar Radius (Solar radii)
+                            </label>
+                            <input type="number" class="form-control" id="habStellarRadius" 
+                                   value="1.0" min="0.1" max="100" step="0.1">
+                            <div class="form-text">Sun = 1.0</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="habOrbitalPeriod" class="form-label">
+                                <i class="fas fa-clock me-1"></i>Orbital Period (days)
+                            </label>
+                            <input type="number" class="form-control" id="habOrbitalPeriod" 
+                                   value="365" min="0.1" max="10000" step="0.1">
+                            <div class="form-text">Earth = 365.25 days</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="habStellarMag" class="form-label">
+                                <i class="fas fa-star me-1"></i>Stellar Magnitude
+                            </label>
+                            <input type="number" class="form-control" id="habStellarMag" 
+                                   value="12.0" min="0" max="30" step="0.1">
+                            <div class="form-text">Apparent magnitude</div>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="fas fa-calculator me-2"></i>Calculate Habitability
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <!-- Habitability Results -->
+            <div id="habitabilityResults" class="card bg-dark border-success" style="display: none;">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-chart-pie me-2"></i>
+                        Habitability Analysis Results
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-6">
+                            <div class="text-center">
+                                <h2 class="text-success" id="habitabilityScore">-</h2>
+                                <p class="mb-0">Overall Score</p>
+                                <div class="progress mt-2" style="height: 10px;">
+                                    <div class="progress-bar bg-success" id="habitabilityProgress" 
+                                         role="progressbar" style="width: 0%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="text-center">
+                                <h4 class="text-warning" id="habitabilityStatus">-</h4>
+                                <p class="mb-0">Habitable Zone</p>
+                                <small class="text-muted" id="habitabilityPosition">-</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-6">
+                            <h6 class="text-primary">Component Scores</h6>
+                            <div class="mb-2">
+                                <div class="d-flex justify-content-between">
+                                    <span>Size Score</span>
+                                    <span id="sizeScore">-</span>
+                                </div>
+                                <div class="progress" style="height: 6px;">
+                                    <div class="progress-bar bg-info" id="sizeScoreBar" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="mb-2">
+                                <div class="d-flex justify-content-between">
+                                    <span>Stellar Score</span>
+                                    <span id="stellarScore">-</span>
+                                </div>
+                                <div class="progress" style="height: 6px;">
+                                    <div class="progress-bar bg-warning" id="stellarScoreBar" style="width: 0%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <h6 class="text-primary">Physical Properties</h6>
+                            <p class="mb-1"><strong>Equilibrium Temp:</strong> <span id="equilibriumTemp">-</span> K</p>
+                            <p class="mb-1"><strong>Habitable Zone:</strong> <span id="hzPosition">-</span></p>
+                            <p class="mb-0"><strong>Temperature Score:</strong> <span id="tempScore">-</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Habitability Criteria -->
+            <div class="card bg-dark border-info">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Habitability Criteria
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <h6 class="text-primary">Size Requirements</h6>
+                    <ul class="list-unstyled small text-muted">
+                        <li>• <strong>Optimal:</strong> 0.8-1.4 Earth radii</li>
+                        <li>• <strong>Acceptable:</strong> 0.5-2.5 Earth radii</li>
+                        <li>• <strong>Too small:</strong> No atmosphere retention</li>
+                        <li>• <strong>Too large:</strong> High surface gravity</li>
+                    </ul>
+
+                    <h6 class="text-primary mt-3">Stellar Requirements</h6>
+                    <ul class="list-unstyled small text-muted">
+                        <li>• <strong>Temperature:</strong> 5000-6500 K (G-type stars)</li>
+                        <li>• <strong>Stability:</strong> Low variability</li>
+                        <li>• <strong>Age:</strong> Mature star (>1 billion years)</li>
+                    </ul>
+
+                    <h6 class="text-primary mt-3">Habitable Zone</h6>
+                    <ul class="list-unstyled small text-muted">
+                        <li>• <strong>Conservative:</strong> 0.95-1.37 AU (Sun)</li>
+                        <li>• <strong>Optimistic:</strong> 0.75-1.77 AU (Sun)</li>
+                        <li>• <strong>Liquid water:</strong> Surface temperature 0-100°C</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Known Habitable Planets -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card bg-dark border-success">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-globe-americas me-2"></i>
+                        Known Habitable Planets
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-dark table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Planet Name</th>
+                                    <th>Habitability Score</th>
+                                    <th>Equilibrium Temp (K)</th>
+                                    <th>Planet Radius (R⊕)</th>
+                                    <th>Orbital Period (days)</th>
+                                    <th>Stellar Type</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Kepler-442b</strong></td>
+                                    <td><span class="badge bg-success">0.85</span></td>
+                                    <td>233</td>
+                                    <td>1.34</td>
+                                    <td>112.3</td>
+                                    <td>K5V</td>
+                                    <td><span class="badge bg-success">Confirmed</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Kepler-452b</strong></td>
+                                    <td><span class="badge bg-success">0.83</span></td>
+                                    <td>265</td>
+                                    <td>1.63</td>
+                                    <td>384.8</td>
+                                    <td>G2V</td>
+                                    <td><span class="badge bg-success">Confirmed</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Proxima Centauri b</strong></td>
+                                    <td><span class="badge bg-warning">0.78</span></td>
+                                    <td>234</td>
+                                    <td>1.27</td>
+                                    <td>11.2</td>
+                                    <td>M5.5V</td>
+                                    <td><span class="badge bg-success">Confirmed</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>TRAPPIST-1e</strong></td>
+                                    <td><span class="badge bg-success">0.81</span></td>
+                                    <td>251</td>
+                                    <td>0.92</td>
+                                    <td>6.1</td>
+                                    <td>M8V</td>
+                                    <td><span class="badge bg-success">Confirmed</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>TOI-715b</strong></td>
+                                    <td><span class="badge bg-warning">0.76</span></td>
+                                    <td>234</td>
+                                    <td>1.55</td>
+                                    <td>19.3</td>
+                                    <td>M4V</td>
+                                    <td><span class="badge bg-warning">Candidate</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scientific Background -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card bg-dark border-info">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-book me-2"></i>
+                        Scientific Background
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="text-primary">Habitable Zone Definition</h6>
+                            <p class="text-muted small">
+                                The habitable zone is the range of distances from a star where liquid water 
+                                could exist on a planet's surface. This depends on the star's luminosity 
+                                and temperature, as well as the planet's atmospheric composition.
+                            </p>
+                            
+                            <h6 class="text-primary mt-3">Key Factors</h6>
+                            <ul class="list-unstyled small text-muted">
+                                <li>• <strong>Stellar flux:</strong> Energy received from star</li>
+                                <li>• <strong>Atmospheric greenhouse effect</strong></li>
+                                <li>• <strong>Planetary albedo</strong></li>
+                                <li>• <strong>Orbital stability</strong></li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-primary">Scoring Methodology</h6>
+                            <p class="text-muted small">
+                                Our habitability score combines multiple factors with weighted importance:
+                                size suitability (25%), stellar characteristics (20%), habitable zone 
+                                position (35%), and equilibrium temperature (20%).
+                            </p>
+                            
+                            <h6 class="text-primary mt-3">Limitations</h6>
+                            <ul class="list-unstyled small text-muted">
+                                <li>• Atmospheric composition unknown</li>
+                                <li>• Tidal heating not considered</li>
+                                <li>• Stellar activity effects</li>
+                                <li>• Geological activity factors</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.getElementById('habitabilityForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    calculateHabitability();
+});
+
+function calculateHabitability() {
+    const formData = {
+        planet_radius: parseFloat(document.getElementById('habPlanetRadius').value),
+        stellar_temp: parseFloat(document.getElementById('habStellarTemp').value),
+        stellar_radius: parseFloat(document.getElementById('habStellarRadius').value),
+        period: parseFloat(document.getElementById('habOrbitalPeriod').value),
+        stellar_mag: parseFloat(document.getElementById('habStellarMag').value)
+    };
+
+    fetch('/api/habitability', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        displayHabitabilityResults(data.habitability);
+    })
+    .catch(error => {
+        console.error('Error calculating habitability:', error);
+        // Use mock data for demonstration
+        displayHabitabilityResults(getMockHabitabilityData(formData));
+    });
+}
+
+function displayHabitabilityResults(habitability) {
+    document.getElementById('habitabilityResults').style.display = 'block';
+    
+    // Update main score
+    const score = habitability.habitability_score;
+    document.getElementById('habitabilityScore').textContent = score.toFixed(3);
+    document.getElementById('habitabilityProgress').style.width = (score * 100) + '%';
+    
+    // Update status
+    const status = habitability.is_habitable ? 'Habitable' : 'Not Habitable';
+    const statusClass = habitability.is_habitable ? 'text-success' : 'text-danger';
+    document.getElementById('habitabilityStatus').textContent = status;
+    document.getElementById('habitabilityStatus').className = 'text-center ' + statusClass;
+    document.getElementById('habitabilityPosition').textContent = habitability.habitable_zone_position;
+    
+    // Update component scores
+    document.getElementById('sizeScore').textContent = habitability.size_score.toFixed(3);
+    document.getElementById('sizeScoreBar').style.width = (habitability.size_score * 100) + '%';
+    
+    document.getElementById('stellarScore').textContent = habitability.stellar_score.toFixed(3);
+    document.getElementById('stellarScoreBar').style.width = (habitability.stellar_score * 100) + '%';
+    
+    document.getElementById('equilibriumTemp').textContent = habitability.equilibrium_temp.toFixed(1);
+    document.getElementById('hzPosition').textContent = habitability.habitable_zone_position;
+    document.getElementById('tempScore').textContent = habitability.temperature_score.toFixed(3);
+    
+    // Update habitable zone boundaries
+    updateHabitableZoneVisualization(habitability);
+}
+
+function updateHabitableZoneVisualization(habitability) {
+    // Calculate habitable zone boundaries
+    const stellarTemp = parseFloat(document.getElementById('habStellarTemp').value);
+    const stellarLuminosity = Math.pow(stellarTemp / 5778, 4);
+    
+    const innerEdge = Math.sqrt(stellarLuminosity / 1.1);
+    const outerEdge = Math.sqrt(stellarLuminosity / 0.53);
+    const optInner = Math.sqrt(stellarLuminosity / 1.77);
+    const optOuter = Math.sqrt(stellarLuminosity / 0.32);
+    
+    document.getElementById('innerEdge').textContent = innerEdge.toFixed(3);
+    document.getElementById('outerEdge').textContent = outerEdge.toFixed(3);
+    document.getElementById('optInner').textContent = optInner.toFixed(3);
+    document.getElementById('optOuter').textContent = optOuter.toFixed(3);
+    
+    // Calculate orbital distance
+    const period = parseFloat(document.getElementById('habOrbitalPeriod').value);
+    const periodYears = period / 365.25;
+    const orbitalDistance = Math.pow(periodYears, 2/3);
+    document.getElementById('calcDistance').textContent = orbitalDistance.toFixed(3);
+    
+    // Update visualization chart
+    updateHabitabilityChart(innerEdge, outerEdge, optInner, optOuter, orbitalDistance);
+}
+
+function updateHabitabilityChart(innerEdge, outerEdge, optInner, optOuter, orbitalDistance) {
+    const ctx = document.getElementById('habitabilityChart').getContext('2d');
+    
+    // Clear existing chart
+    if (window.habitabilityChart) {
+        window.habitabilityChart.destroy();
+    }
+    
+    window.habitabilityChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Inner Edge', 'Conservative HZ', 'Orbital Distance', 'Conservative HZ', 'Outer Edge'],
+            datasets: [{
+                label: 'Distance (AU)',
+                data: [optInner, innerEdge, orbitalDistance, outerEdge, optOuter],
+                backgroundColor: [
+                    '#dc3545', // Too close
+                    '#ffc107', // Conservative inner
+                    '#28a745', // Current position
+                    '#ffc107', // Conservative outer
+                    '#dc3545'  // Too far
+                ],
+                borderWidth: 1,
+                borderColor: '#ffffff'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        color: '#ffffff'
+                    }
+                },
+                x: {
+                    ticks: {
+                        color: '#ffffff'
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        }
+    });
+}
+
+function getMockHabitabilityData(formData) {
+    // Calculate mock habitability data based on input
+    const planetRadius = formData.planet_radius;
+    const stellarTemp = formData.stellar_temp;
+    const orbitalPeriod = formData.period;
+    
+    // Size score (optimal: 0.8-1.4 Earth radii)
+    let sizeScore = 0;
+    if (planetRadius >= 0.8 && planetRadius <= 1.4) {
+        sizeScore = 1.0;
+    } else if (planetRadius >= 0.5 && planetRadius <= 2.5) {
+        sizeScore = 1.0 - Math.abs(planetRadius - 1.1) / 0.3;
+    }
+    sizeScore = Math.max(0, Math.min(1, sizeScore));
+    
+    // Stellar score (optimal: 5000-6500 K)
+    let stellarScore = 0;
+    if (stellarTemp >= 5000 && stellarTemp <= 6500) {
+        stellarScore = 1.0;
+    } else if (stellarTemp >= 2500 && stellarTemp <= 7200) {
+        stellarScore = 1.0 - Math.abs(stellarTemp - 5750) / 1000;
+    }
+    stellarScore = Math.max(0, Math.min(1, stellarScore));
+    
+    // Habitable zone calculation
+    const stellarLuminosity = Math.pow(stellarTemp / 5778, 4);
+    const innerEdge = Math.sqrt(stellarLuminosity / 1.1);
+    const outerEdge = Math.sqrt(stellarLuminosity / 0.53);
+    const periodYears = orbitalPeriod / 365.25;
+    const orbitalDistance = Math.pow(periodYears, 2/3);
+    
+    let hzScore = 0;
+    let hzPosition = 'outside';
+    if (orbitalDistance >= innerEdge && orbitalDistance <= outerEdge) {
+        hzScore = 1.0;
+        hzPosition = 'conservative';
+    } else if (orbitalDistance >= Math.sqrt(stellarLuminosity / 1.77) && 
+               orbitalDistance <= Math.sqrt(stellarLuminosity / 0.32)) {
+        hzScore = 0.7;
+        hzPosition = 'optimistic';
+    } else if (orbitalDistance < innerEdge) {
+        hzPosition = 'too_close';
+    } else {
+        hzPosition = 'too_far';
+    }
+    
+    // Temperature score
+    const equilibriumTemp = stellarTemp * Math.pow((1 - 0.3) * stellarLuminosity / Math.pow(orbitalDistance, 2), 0.25);
+    let tempScore = 0;
+    if (equilibriumTemp >= 250 && equilibriumTemp <= 350) {
+        tempScore = 1.0;
+    } else if (equilibriumTemp >= 200 && equilibriumTemp <= 400) {
+        tempScore = 1.0 - Math.abs(equilibriumTemp - 300) / 50;
+    }
+    tempScore = Math.max(0, Math.min(1, tempScore));
+    
+    // Overall score
+    const overallScore = sizeScore * 0.25 + stellarScore * 0.20 + hzScore * 0.35 + tempScore * 0.20;
+    
+    return {
+        habitability_score: overallScore,
+        is_habitable: overallScore >= 0.6,
+        habitable_zone_score: hzScore,
+        size_score: sizeScore,
+        temperature_score: tempScore,
+        stellar_score: stellarScore,
+        equilibrium_temp: equilibriumTemp,
+        habitable_zone_position: hzPosition
+    };
+}
+</script>
+{% endblock %}

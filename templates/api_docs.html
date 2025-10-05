@@ -1,0 +1,612 @@
+{% extends "base.html" %}
+
+{% block title %}📚 API Documentation - ExoplanetML{% endblock %}
+
+{% block content %}
+<div class="api-docs-page container-fluid py-5 mt-5">
+    <!-- API Documentation Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card api-hero-card">
+                <div class="api-hero-header">
+                    <h4 class="mb-0">
+                        <i class="fas fa-code me-2"></i>
+                        Exoplanet ML Analysis API Documentation
+                    </h4>
+                    <p class="mb-0 mt-2">Complete REST API reference for exoplanet classification and analysis</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- API Navigation -->
+        <div class="col-lg-3">
+            <div class="card bg-dark border-secondary sticky-top" style="top: 100px;">
+                <div class="card-header bg-secondary text-white">
+                    <h6 class="mb-0">
+                        <i class="fas fa-list me-2"></i>
+                        API Endpoints
+                    </h6>
+                </div>
+                <div class="card-body p-0">
+                    <nav class="nav flex-column">
+                        <a class="nav-link text-light border-bottom" href="#health">Health Check</a>
+                        <a class="nav-link text-light border-bottom" href="#predict">Basic Prediction</a>
+                        <a class="nav-link text-light border-bottom" href="#analyze">Complete Analysis</a>
+                        <a class="nav-link text-light border-bottom" href="#comprehensive">Comprehensive Analysis</a>
+                        <a class="nav-link text-light border-bottom" href="#habitability">Habitability</a>
+                        <a class="nav-link text-light border-bottom" href="#batch">Batch Processing</a>
+                        <a class="nav-link text-light border-bottom" href="#nasa">NASA Integration</a>
+                        <a class="nav-link text-light border-bottom" href="#anomaly">Anomaly Detection</a>
+                        <a class="nav-link text-light border-bottom" href="#explainability">Explainability</a>
+                        <a class="nav-link text-light" href="#cross-mission">Cross-Mission</a>
+                    </nav>
+                </div>
+            </div>
+        </div>
+
+        <!-- API Documentation Content -->
+        <div class="col-lg-9">
+            <!-- Health Check -->
+            <div id="health" class="card bg-dark border-success mb-4">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-heartbeat me-2"></i>
+                        Health Check
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="text-primary">Endpoint</h6>
+                            <code class="endpoint-chip">GET /api/health</code>
+                            
+                            <h6 class="text-primary mt-3">Description</h6>
+                            <p class="text-muted">Check system health and model availability</p>
+                            
+                            <h6 class="text-primary mt-3">Response</h6>
+                            <pre class="bg-dark text-light p-3 rounded"><code>{
+  "status": "healthy",
+  "timestamp": "2024-01-15T14:30:25.123Z",
+  "version": "1.0.0",
+  "models_loaded": true,
+  "features": {
+    "classification": true,
+    "habitability": true,
+    "explanations": true,
+    "anomaly_detection": true
+  }
+}</code></pre>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-primary">Test Request</h6>
+                            <button class="btn btn-outline-success btn-sm mb-3" onclick="testAPI('/api/health', 'GET')">
+                                <i class="fas fa-play me-1"></i>Test Endpoint
+                            </button>
+                            <div id="health-response" class="bg-dark text-light p-3 rounded" style="display: none;">
+                                <pre id="health-response-content"></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Basic Prediction -->
+            <div id="predict" class="card bg-dark border-info mb-4">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-search me-2"></i>
+                        Basic Prediction
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="text-primary">Endpoint</h6>
+                            <code class="endpoint-chip">POST /api/predict</code>
+                            
+                            <h6 class="text-primary mt-3">Description</h6>
+                            <p class="text-muted">Basic exoplanet classification using tabular models</p>
+                            
+                            <h6 class="text-primary mt-3">Request Body</h6>
+                            <pre class="bg-dark text-light p-3 rounded"><code>{
+  "period": 365.25,
+  "planet_radius": 1.0,
+  "stellar_temp": 5800,
+  "stellar_radius": 1.0,
+  "transit_depth": 0.01,
+  "transit_duration": 0.1,
+  "stellar_mag": 12.0
+}</code></pre>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-primary">Response</h6>
+                            <pre class="bg-dark text-light p-3 rounded"><code>{
+  "prediction_id": "uuid-here",
+  "timestamp": "2024-01-15T14:30:25.123Z",
+  "prediction": {
+    "prediction": "confirmed",
+    "confidence": 0.89,
+    "probabilities": {
+      "confirmed": 0.89,
+      "candidate": 0.08,
+      "false_positive": 0.03
+    }
+  }
+}</code></pre>
+                            
+                            <h6 class="text-primary mt-3">Test Request</h6>
+                            <button class="btn btn-outline-info btn-sm mb-3" onclick="testAPI('/api/predict', 'POST', getSampleData())">
+                                <i class="fas fa-play me-1"></i>Test Endpoint
+                            </button>
+                            <div id="predict-response" class="bg-dark text-light p-3 rounded" style="display: none;">
+                                <pre id="predict-response-content"></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Complete Analysis -->
+            <div id="analyze" class="card bg-dark border-warning mb-4">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0">
+                        <i class="fas fa-chart-line me-2"></i>
+                        Complete Analysis
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="text-primary">Endpoint</h6>
+                            <code class="endpoint-chip">POST /api/analyze</code>
+                            
+                            <h6 class="text-primary mt-3">Description</h6>
+                            <p class="text-muted">Comprehensive analysis including classification, habitability, and anomaly detection</p>
+                            
+                            <h6 class="text-primary mt-3">Request Body</h6>
+                            <pre class="bg-dark text-light p-3 rounded"><code>{
+  "orbital_period": 365.25,
+  "planet_radius": 1.0,
+  "stellar_temp": 5800,
+  "stellar_radius": 1.0,
+  "stellar_mag": 12.0,
+  "transit_depth": 0.01,
+  "transit_duration": 0.1,
+  "include_explanations": false
+}</code></pre>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-primary">Response</h6>
+                            <pre class="bg-dark text-light p-3 rounded"><code>{
+  "prediction_id": "uuid-here",
+  "timestamp": "2024-01-15T14:30:25.123Z",
+  "processing_time_ms": 125.5,
+  "classification": { ... },
+  "habitability": {
+    "habitability_score": 0.72,
+    "is_habitable": true,
+    "equilibrium_temp": 288.5,
+    "habitable_zone_position": "conservative"
+  },
+  "anomaly_detection": {
+    "is_anomaly": false,
+    "anomaly_score": -0.15,
+    "anomaly_type": "normal",
+    "confidence": 85.0
+  }
+}</code></pre>
+                            
+                            <h6 class="text-primary mt-3">Test Request</h6>
+                            <button class="btn btn-outline-warning btn-sm mb-3" onclick="testAPI('/api/analyze', 'POST', getSampleData())">
+                                <i class="fas fa-play me-1"></i>Test Endpoint
+                            </button>
+                            <div id="analyze-response" class="bg-dark text-light p-3 rounded" style="display: none;">
+                                <pre id="analyze-response-content"></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Comprehensive Analysis -->
+            <div id="comprehensive" class="card bg-dark border-primary mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-brain me-2"></i>
+                        Comprehensive Analysis
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="text-primary">Endpoint</h6>
+                            <code class="endpoint-chip">POST /api/comprehensive</code>
+                            
+                            <h6 class="text-primary mt-3">Description</h6>
+                            <p class="text-muted">Full analysis using all models including CNN and hybrid approaches</p>
+                            
+                            <h6 class="text-primary mt-3">Features</h6>
+                            <ul class="text-muted">
+                                <li>Basic classification</li>
+                                <li>Habitability analysis</li>
+                                <li>AI explanations (SHAP/LIME)</li>
+                                <li>Anomaly detection</li>
+                                <li>CNN light curve analysis</li>
+                                <li>Hybrid model predictions</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-primary">Response</h6>
+                            <pre class="bg-dark text-light p-3 rounded"><code>{
+  "prediction_id": "uuid-here",
+  "timestamp": "2024-01-15T14:30:25.123Z",
+  "basic_prediction": { ... },
+  "habitability": { ... },
+  "explanations": {
+    "xgboost_shap": {
+      "feature_importance": { ... },
+      "top_features": [ ... ]
+    },
+    "lime": { ... }
+  },
+  "cnn_analysis": {
+    "prediction": "confirmed",
+    "probabilities": [0.89, 0.08, 0.03],
+    "confidence": 0.89
+  },
+  "hybrid_analysis": { ... }
+}</code></pre>
+                            
+                            <h6 class="text-primary mt-3">Test Request</h6>
+                            <button class="btn btn-outline-primary btn-sm mb-3" onclick="testAPI('/api/comprehensive', 'POST', getSampleData())">
+                                <i class="fas fa-play me-1"></i>Test Endpoint
+                            </button>
+                            <div id="comprehensive-response" class="bg-dark text-light p-3 rounded" style="display: none;">
+                                <pre id="comprehensive-response-content"></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Habitability Analysis -->
+            <div id="habitability" class="card bg-dark border-success mb-4">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-leaf me-2"></i>
+                        Habitability Analysis
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="text-primary">Endpoint</h6>
+                            <code class="endpoint-chip">POST /api/habitability</code>
+                            
+                            <h6 class="text-primary mt-3">Description</h6>
+                            <p class="text-muted">Calculate planetary habitability scores and related metrics</p>
+                            
+                            <h6 class="text-primary mt-3">Request Body</h6>
+                            <pre class="bg-dark text-light p-3 rounded"><code>{
+  "planet_radius": 1.0,
+  "stellar_temp": 5800,
+  "stellar_radius": 1.0,
+  "period": 365.25,
+  "stellar_mag": 12.0
+}</code></pre>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-primary">Response</h6>
+                            <pre class="bg-dark text-light p-3 rounded"><code>{
+  "prediction_id": "uuid-here",
+  "timestamp": "2024-01-15T14:30:25.123Z",
+  "habitability": {
+    "habitability_score": 0.72,
+    "is_habitable": true,
+    "habitable_zone_score": 0.85,
+    "size_score": 0.90,
+    "temperature_score": 0.75,
+    "stellar_score": 0.80,
+    "equilibrium_temp": 288.5,
+    "habitable_zone_position": "conservative"
+  }
+}</code></pre>
+                            
+                            <h6 class="text-primary mt-3">Test Request</h6>
+                            <button class="btn btn-outline-success btn-sm mb-3" onclick="testAPI('/api/habitability', 'POST', getHabitabilityData())">
+                                <i class="fas fa-play me-1"></i>Test Endpoint
+                            </button>
+                            <div id="habitability-response" class="bg-dark text-light p-3 rounded" style="display: none;">
+                                <pre id="habitability-response-content"></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Batch Processing -->
+            <div id="batch" class="card bg-dark border-info mb-4">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-layer-group me-2"></i>
+                        Batch Processing
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="text-primary">Endpoint</h6>
+                            <code class="endpoint-chip">POST /api/batch</code>
+                            
+                            <h6 class="text-primary mt-3">Description</h6>
+                            <p class="text-muted">Process multiple exoplanet candidates in batch</p>
+                            
+                            <h6 class="text-primary mt-3">Request Body</h6>
+                            <pre class="bg-dark text-light p-3 rounded"><code>{
+  "candidates": [
+    {
+      "period": 365.25,
+      "planet_radius": 1.0,
+      "stellar_temp": 5800,
+      "stellar_radius": 1.0,
+      "stellar_mag": 12.0
+    },
+    {
+      "period": 200.0,
+      "planet_radius": 1.5,
+      "stellar_temp": 5500,
+      "stellar_radius": 0.8,
+      "stellar_mag": 10.0
+    }
+  ]
+}</code></pre>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-primary">Response</h6>
+                            <pre class="bg-dark text-light p-3 rounded"><code>{
+  "batch_id": "uuid-here",
+  "timestamp": "2024-01-15T14:30:25.123Z",
+  "total_candidates": 2,
+  "results": [
+    {
+      "candidate_id": 0,
+      "classification": { ... },
+      "habitability": { ... },
+      "anomaly_detection": { ... }
+    },
+    {
+      "candidate_id": 1,
+      "classification": { ... },
+      "habitability": { ... },
+      "anomaly_detection": { ... }
+    }
+  ]
+}</code></pre>
+                            
+                            <h6 class="text-primary mt-3">Test Request</h6>
+                            <button class="btn btn-outline-info btn-sm mb-3" onclick="testAPI('/api/batch', 'POST', getBatchData())">
+                                <i class="fas fa-play me-1"></i>Test Endpoint
+                            </button>
+                            <div id="batch-response" class="bg-dark text-light p-3 rounded" style="display: none;">
+                                <pre id="batch-response-content"></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- NASA Integration -->
+            <div id="nasa" class="card bg-dark border-warning mb-4">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0">
+                        <i class="fas fa-satellite me-2"></i>
+                        NASA Integration
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="text-primary">Endpoints</h6>
+                            <ul class="list-unstyled">
+                                <li><code class="endpoint-chip">GET /api/nasa/latest</code> - Latest discoveries</li>
+                                <li><code class="endpoint-chip">GET /api/nasa/habitable</code> - Habitable planets</li>
+                                <li><code class="endpoint-chip">GET /api/nasa/statistics</code> - Discovery statistics</li>
+                            </ul>
+                            
+                            <h6 class="text-primary mt-3">Description</h6>
+                            <p class="text-muted">Access to NASA's Exoplanet Archive data</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-primary">Example Response</h6>
+                            <pre class="bg-dark text-light p-3 rounded"><code>{
+  "habitable_planets": [
+    {
+      "name": "Kepler-442b",
+      "habitability_score": 0.85,
+      "equilibrium_temp": 233,
+      "planet_radius": 1.34,
+      "orbital_period": 112.3
+    }
+  ],
+  "timestamp": "2024-01-15T14:30:25.123Z"
+}</code></pre>
+                            
+                            <h6 class="text-primary mt-3">Test Requests</h6>
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-outline-warning btn-sm" onclick="testAPI('/api/nasa/latest', 'GET')">
+                                    <i class="fas fa-play me-1"></i>Latest Discoveries
+                                </button>
+                                <button class="btn btn-outline-warning btn-sm" onclick="testAPI('/api/nasa/habitable', 'GET')">
+                                    <i class="fas fa-play me-1"></i>Habitable Planets
+                                </button>
+                                <button class="btn btn-outline-warning btn-sm" onclick="testAPI('/api/nasa/statistics', 'GET')">
+                                    <i class="fas fa-play me-1"></i>Statistics
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Error Handling -->
+            <div class="card bg-dark border-danger mb-4">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        Error Handling
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <h6 class="text-primary">Error Response Format</h6>
+                    <pre class="bg-dark text-light p-3 rounded"><code>{
+  "error": "Error message description",
+  "timestamp": "2024-01-15T14:30:25.123Z",
+  "status_code": 400
+}</code></pre>
+                    
+                    <h6 class="text-primary mt-3">Common Error Codes</h6>
+                    <ul class="text-muted">
+                        <li><strong>400 Bad Request</strong> - Invalid input parameters</li>
+                        <li><strong>500 Internal Server Error</strong> - Model processing error</li>
+                        <li><strong>503 Service Unavailable</strong> - Models not loaded</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+function testAPI(endpoint, method, data = null) {
+    const options = {
+        method: method,
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    };
+    
+    if (data && method === 'POST') {
+        options.body = JSON.stringify(data);
+    }
+    
+    fetch(endpoint, options)
+        .then(response => response.json())
+        .then(data => {
+            const responseId = endpoint.replace('/api/', '').replace('/', '-') + '-response';
+            const contentId = responseId + '-content';
+            document.getElementById(responseId).style.display = 'block';
+            document.getElementById(contentId).textContent = JSON.stringify(data, null, 2);
+        })
+        .catch(error => {
+            const responseId = endpoint.replace('/api/', '').replace('/', '-') + '-response';
+            const contentId = responseId + '-content';
+            document.getElementById(responseId).style.display = 'block';
+            document.getElementById(contentId).textContent = 'Error: ' + error.message;
+        });
+}
+
+// Enhance API docs UX: copy buttons and active nav highlighting
+document.addEventListener('DOMContentLoaded', function() {
+    // Copy buttons on code blocks
+    document.querySelectorAll('.api-docs-page pre').forEach(function(pre) {
+        if (pre.querySelector('.copy-btn')) return;
+        const btn = document.createElement('button');
+        btn.className = 'copy-btn';
+        btn.innerHTML = '<i class="fas fa-copy me-1"></i>Copy';
+        btn.addEventListener('click', function() {
+            const code = pre.querySelector('code');
+            if (!code) return;
+            const text = code.innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                btn.innerHTML = '<i class="fas fa-check me-1"></i>Copied';
+                setTimeout(() => btn.innerHTML = '<i class="fas fa-copy me-1"></i>Copy', 1500);
+            }).catch(() => {
+                btn.innerHTML = '<i class="fas fa-exclamation-triangle me-1"></i>Error';
+                setTimeout(() => btn.innerHTML = '<i class="fas fa-copy me-1"></i>Copy', 1500);
+            });
+        });
+        pre.appendChild(btn);
+    });
+
+    // Active section highlighting
+    const sections = document.querySelectorAll('.api-docs-page [id]');
+    const navLinks = document.querySelectorAll('.api-docs-page .nav .nav-link');
+    const onScroll = () => {
+        let currentId = null;
+        sections.forEach(section => {
+            const rect = section.getBoundingClientRect();
+            if (rect.top <= 120 && rect.bottom >= 120) currentId = section.id;
+        });
+        if (!currentId) return;
+        navLinks.forEach(link => {
+            const href = link.getAttribute('href');
+            if (href && href.slice(1) === currentId) link.classList.add('active');
+            else link.classList.remove('active');
+        });
+    };
+    document.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+});
+function getSampleData() {
+    return {
+        orbital_period: 365.25,
+        planet_radius: 1.0,
+        stellar_temp: 5800,
+        stellar_radius: 1.0,
+        stellar_mag: 12.0,
+        transit_depth: 0.01,
+        transit_duration: 0.1,
+        include_explanations: false
+    };
+}
+
+function getHabitabilityData() {
+    return {
+        planet_radius: 1.0,
+        stellar_temp: 5800,
+        stellar_radius: 1.0,
+        period: 365.25,
+        stellar_mag: 12.0
+    };
+}
+
+function getBatchData() {
+    return {
+        candidates: [
+            {
+                period: 365.25,
+                planet_radius: 1.0,
+                stellar_temp: 5800,
+                stellar_radius: 1.0,
+                stellar_mag: 12.0
+            },
+            {
+                period: 200.0,
+                planet_radius: 1.5,
+                stellar_temp: 5500,
+                stellar_radius: 0.8,
+                stellar_mag: 10.0
+            }
+        ]
+    };
+}
+
+// Smooth scrolling for navigation links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    });
+});
+</script>
+{% endblock %}

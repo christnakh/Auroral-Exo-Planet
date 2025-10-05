@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔭 Candidate Test Form</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: 300;
+        }
+        
+        .form-container {
+            padding: 40px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .preset-buttons {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .preset-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s ease;
+        }
+        
+        .preset-btn:hover {
+            background: #5a6fd8;
+        }
+        
+        .submit-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 8px;
+            font-size: 18px;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.3s ease;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .result h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        
+        .prediction {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+            margin: 10px 0;
+        }
+        
+        .confidence {
+            font-size: 18px;
+            color: #666;
+        }
+        
+        .probabilities {
+            margin-top: 15px;
+        }
+        
+        .prob-bar {
+            display: flex;
+            align-items: center;
+            margin: 8px 0;
+        }
+        
+        .prob-label {
+            width: 120px;
+            font-weight: 600;
+        }
+        
+        .prob-value {
+            flex: 1;
+            background: #e1e5e9;
+            height: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 0 10px;
+        }
+        
+        .prob-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.5s ease;
+        }
+        
+        .prob-percent {
+            width: 50px;
+            text-align: right;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔭 Candidate Test Form</h1>
+            <p>Test your exoplanet classification system with real candidate data</p>
+        </div>
+        
+        <div class="form-container">
+            <form id="candidateForm">
+                <div class="preset-buttons">
+                    <button type="button" class="preset-btn" onclick="loadPreset('good')">Good Candidate</button>
+                    <button type="button" class="preset-btn" onclick="loadPreset('epic')">EPIC 220192485.01</button>
+                    <button type="button" class="preset-btn" onclick="loadPreset('k2')">K2-151 b</button>
+                    <button type="button" class="preset-btn" onclick="loadPreset('k2-283')">K2-283 b</button>
+                </div>
+                
+                <div class="form-group">
+                    <label for="period">Period (days)</label>
+                    <input type="number" id="period" name="period" step="0.01" value="15.0">
+                </div>
+                
+                <div class="form-group">
+                    <label for="duration">Duration (hours)</label>
+                    <input type="number" id="duration" name="duration" step="0.01" value="3.0">
+                </div>
+                
+                <div class="form-group">
+                    <label for="depth">Depth (ppm)</label>
+                    <input type="number" id="depth" name="depth" step="0.01" value="2000.0">
+                </div>
+                
+                <div class="form-group">
+                    <label for="planet_radius">Planet Radius (Earth radii)</label>
+                    <input type="number" id="planet_radius" name="planet_radius" step="0.01" value="2.0">
+                </div>
+                
+                <div class="form-group">
+                    <label for="stellar_radius">Stellar Radius (Solar radii)</label>
+                    <input type="number" id="stellar_radius" name="stellar_radius" step="0.01" value="1.0">
+                </div>
+                
+                <div class="form-group">
+                    <label for="stellar_temp">Stellar Temperature (K)</label>
+                    <input type="number" id="stellar_temp" name="stellar_temp" step="1" value="5800">
+                </div>
+                
+                <div class="form-group">
+                    <label for="stellar_mag">Stellar Magnitude</label>
+                    <input type="number" id="stellar_mag" name="stellar_mag" step="0.01" value="12.0">
+                </div>
+                
+                <div class="form-group">
+                    <label for="impact_param">Impact Parameter</label>
+                    <input type="number" id="impact_param" name="impact_param" step="0.01" value="0.5">
+                </div>
+                
+                <div class="form-group">
+                    <label for="transit_snr">Transit SNR</label>
+                    <input type="number" id="transit_snr" name="transit_snr" step="0.1" value="50.0">
+                </div>
+                
+                <div class="form-group">
+                    <label for="num_transits">Number of Transits</label>
+                    <input type="number" id="num_transits" name="num_transits" step="1" value="10">
+                </div>
+                
+                <div class="form-group">
+                    <label for="duty_cycle">Duty Cycle</label>
+                    <input type="number" id="duty_cycle" name="duty_cycle" step="0.01" value="0.1">
+                </div>
+                
+                <button type="submit" class="submit-btn">🔍 Classify Exoplanet</button>
+            </form>
+            
+            <div id="result" class="result" style="display: none;">
+                <h3>Classification Result</h3>
+                <div id="prediction" class="prediction"></div>
+                <div id="confidence" class="confidence"></div>
+                <div id="probabilities" class="probabilities"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Preset data
+        const presets = {
+            good: {
+                period: 15.0,
+                duration: 3.0,
+                depth: 2000.0,
+                planet_radius: 2.0,
+                stellar_radius: 1.0,
+                stellar_temp: 5800,
+                stellar_mag: 12.0,
+                impact_param: 0.5,
+                transit_snr: 50.0,
+                num_transits: 10,
+                duty_cycle: 0.1
+            },
+            epic: {
+                period: 50.69369,
+                duration: 1.1041,
+                depth: 9.947,
+                planet_radius: 0.79,
+                stellar_radius: 0.79,
+                stellar_temp: 5805,
+                stellar_mag: 15.597,
+                impact_param: 1.276,
+                transit_snr: 505.6,
+                num_transits: 621,
+                duty_cycle: 1.385
+            },
+            k2: {
+                period: 3.835376,
+                duration: 1.5408,
+                depth: 10.117,
+                planet_radius: 0.13,
+                stellar_radius: 0.13,
+                stellar_temp: 4537,
+                stellar_mag: 15.784,
+                impact_param: 0.258,
+                transit_snr: 65.4,
+                num_transits: 215,
+                duty_cycle: 0.262
+            },
+            'k2-283': {
+                period: 1.921076,
+                duration: 1.7496,
+                depth: 11.983,
+                planet_radius: 0.34,
+                stellar_radius: 0.34,
+                stellar_temp: 4661,
+                stellar_mag: 15.516,
+                impact_param: 0.0,
+                transit_snr: 0.0,
+                num_transits: 0,
+                duty_cycle: 0.0
+            }
+        };
+        
+        function loadPreset(presetName) {
+            const preset = presets[presetName];
+            if (preset) {
+                Object.keys(preset).forEach(key => {
+                    const input = document.getElementById(key);
+                    if (input) {
+                        input.value = preset[key];
+                    }
+                });
+            }
+        }
+        
+        document.getElementById('candidateForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData.entries());
+            
+            // Convert to numbers
+            Object.keys(data).forEach(key => {
+                data[key] = parseFloat(data[key]);
+            });
+            
+            try {
+                const response = await fetch('/api/analyze', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                
+                // Display results
+                document.getElementById('prediction').textContent = `Prediction: ${result.classification.prediction}`;
+                document.getElementById('confidence').textContent = `Confidence: ${(result.classification.confidence * 100).toFixed(1)}%`;
+                
+                // Display probabilities
+                const probContainer = document.getElementById('probabilities');
+                probContainer.innerHTML = '<h4>Probabilities:</h4>';
+                
+                Object.entries(result.classification.probabilities).forEach(([class_name, prob]) => {
+                    const probDiv = document.createElement('div');
+                    probDiv.className = 'prob-bar';
+                    probDiv.innerHTML = `
+                        <div class="prob-label">${class_name}:</div>
+                        <div class="prob-value">
+                            <div class="prob-fill" style="width: ${prob * 100}%"></div>
+                        </div>
+                        <div class="prob-percent">${(prob * 100).toFixed(1)}%</div>
+                    `;
+                    probContainer.appendChild(probDiv);
+                });
+                
+                document.getElementById('result').style.display = 'block';
+                
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error classifying exoplanet. Please check the console for details.');
+            }
+        });
+    </script>
+</body>
+</html>

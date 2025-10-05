@@ -1,0 +1,298 @@
+{% extends "base.html" %}
+
+{% block title %}🔮 AurOracle - Advanced Exoplanet Analysis{% endblock %}
+
+{% block content %}
+<!-- Professional Hero Section -->
+<div class="auroracle-hero-full">
+    <div class="hero-content">
+        <div class="hero-left">
+            <div class="hero-logo">
+                <div class="logo-icon">
+                    <i class="fas fa-atom"></i>
+                </div>
+                <span class="logo-text">AurOracle</span>
+            </div>
+            <h1 class="hero-title animate-fadeInUp">
+                Discover the<br>Universe
+            </h1>
+            <p class="hero-subtitle animate-fadeInUp" style="animation-delay: 0.2s;">
+                Advanced AI-powered exoplanet analysis platform for researchers and space enthusiasts
+            </p>
+            <div class="hero-actions animate-fadeInUp" style="animation-delay: 0.3s;">
+                <a href="{{ url_for('analyze') }}" class="btn primary-btn btn-lg">
+                    <i class="fas fa-search me-2"></i>Analyze Now
+                </a>
+                <a href="{{ url_for('api_docs') }}" class="btn secondary-btn btn-lg">
+                    <i class="fas fa-code me-2"></i>API Docs
+                </a>
+            </div>
+        </div>
+        <div class="hero-right">
+            <div class="hero-visual">
+                <div class="professional-graphic">
+                    <div class="data-visualization">
+                        <div class="chart-line"></div>
+                        <div class="chart-bar"></div>
+                        <div class="chart-dot"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Professional Features Overview -->
+<div class="features-section">
+    <div class="features-container">
+        <div class="features-card">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">
+                        <i class="fas fa-star me-2"></i>
+                        Advanced System Capabilities
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="stats-grid">
+                        <div class="stat-card glass">
+                            <div class="stat-number">93%</div>
+                            <div class="stat-label">Best Accuracy</div>
+                            <small class="text-muted">Hybrid Model</small>
+                        </div>
+                        <div class="stat-card glass">
+                            <div class="stat-number">5</div>
+                            <div class="stat-label">ML Models</div>
+                            <small class="text-muted">Active Models</small>
+                        </div>
+                        <div class="stat-card glass">
+                            <div class="stat-number">21K</div>
+                            <div class="stat-label">Training Samples</div>
+                            <small class="text-muted">Exoplanet Data</small>
+                        </div>
+                        <div class="stat-card glass">
+                            <div class="stat-number">125ms</div>
+                            <div class="stat-label">Avg Processing</div>
+                            <small class="text-muted">Per Prediction</small>
+                        </div>
+				</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="quick-actions-section">
+    <div class="quick-actions-container">
+        <div class="quick-actions-grid">
+            <div class="quick-action-card">
+            <div class="card analysis-card h-100">
+                <div class="card-header analysis-header">
+                    <div class="analysis-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <div class="analysis-title">
+                        <h5 class="mb-0">Single Analysis</h5>
+                        <p class="mb-0">Individual exoplanet analysis</p>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p class="analysis-description">
+                        Analyze individual exoplanet candidates with comprehensive 
+                        classification, habitability assessment, and anomaly detection.
+                    </p>
+                    <div class="analysis-features">
+                        <div class="feature-item">
+                            <i class="fas fa-bolt text-primary"></i>
+                            <span>Real-time predictions</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-leaf text-success"></i>
+                            <span>Habitability scoring</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-brain text-info"></i>
+                            <span>AI explanations</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-exclamation-triangle text-warning"></i>
+                            <span>Anomaly detection</span>
+                        </div>
+                    </div>
+                    <div class="analysis-action">
+                        <a href="{{ url_for('analyze') }}" class="btn analysis-btn">
+                            <i class="fas fa-arrow-right me-2"></i>Start Analysis
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="quick-action-card">
+            <div class="card batch-card h-100">
+                <div class="card-header batch-header">
+                    <div class="batch-icon">
+                        <i class="fas fa-layer-group"></i>
+                    </div>
+                    <div class="batch-title">
+                        <h5 class="mb-0">Batch Processing</h5>
+                        <p class="mb-0">Multiple exoplanet analysis</p>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p class="batch-description">
+                        Process multiple exoplanet candidates simultaneously with 
+                        batch analysis capabilities and comprehensive reporting.
+                    </p>
+                    <div class="batch-features">
+                        <div class="feature-item">
+                            <i class="fas fa-file-csv text-primary"></i>
+                            <span>CSV file upload</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-cogs text-success"></i>
+                            <span>Bulk processing</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-download text-info"></i>
+                            <span>Export results</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-chart-line text-warning"></i>
+                            <span>Progress tracking</span>
+                        </div>
+                    </div>
+                    <div class="batch-action">
+                        <a href="{{ url_for('batch') }}" class="btn batch-btn">
+                            <i class="fas fa-arrow-right me-2"></i>Process Batch
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="quick-action-card">
+            <div class="card models-card h-100">
+                <div class="card-header models-header">
+                    <div class="models-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="models-title">
+                        <h5 class="mb-0">ML Models</h5>
+                        <p class="mb-0">Advanced machine learning</p>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p class="models-description">
+                        Explore our advanced machine learning models and their 
+                        performance metrics for exoplanet classification.
+                    </p>
+                    <div class="models-features">
+                        <div class="feature-item">
+                            <i class="fas fa-chart-bar text-primary"></i>
+                            <span>Model comparison</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-tachometer-alt text-success"></i>
+                            <span>Performance metrics</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-cogs text-info"></i>
+                            <span>Training details</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-percentage text-warning"></i>
+                            <span>Accuracy statistics</span>
+                        </div>
+                    </div>
+                    <div class="models-action"></div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+
+<!-- Scientific Features -->
+<div class="scientific-features-section">
+    <div class="scientific-features-container">
+            <div class="card bg-dark border-secondary">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-microscope me-2"></i>
+                        Scientific Features
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="text-primary">Advanced Analysis</h6>
+                            <ul class="list-unstyled small text-muted">
+                                <li>• <strong>Habitability Analysis:</strong> Calculate planetary habitability scores</li>
+                                <li>• <strong>Anomaly Detection:</strong> Identify unusual exoplanet systems</li>
+                                <li>• <strong>Explainable AI:</strong> Understand model decisions with SHAP/LIME</li>
+                                <li>• <strong>Cross-Mission Validation:</strong> Test across different space missions</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-primary">Data Sources</h6>
+                            <ul class="list-unstyled small text-muted">
+                                <li>• <strong>Kepler Mission:</strong> 2,662 confirmed planets</li>
+                                <li>• <strong>TESS Mission:</strong> 400+ new discoveries</li>
+                                <li>• <strong>K2 Mission:</strong> 500+ additional planets</li>
+                                <li>• <strong>NASA Archive:</strong> Real-time data integration</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+				</div>
+			
+    <!-- API Documentation -->
+    <div class="api-integration-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card api-card">
+                        <div class="card-header api-header">
+                            <h5 class="mb-0">
+                                <i class="fas fa-code me-2"></i>
+                                API & Integration
+                            </h5>
+                        </div>
+                        <div class="card-body api-body">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <p class="api-description">
+                                        Access our powerful API for programmatic analysis, integration 
+                                        with your own tools, and automated exoplanet discovery workflows.
+                                    </p>
+                                    <div class="api-actions">
+                                        <a href="{{ url_for('api_docs') }}" class="btn api-btn-primary">
+                                            <i class="fas fa-book me-2"></i>API Documentation
+                                        </a>
+                                        <a href="{{ url_for('chat_page') }}" class="btn api-btn-secondary">
+                                            <i class="fas fa-comments me-2"></i>Exoplanet Chat
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <h6 class="api-endpoints-title">Available Endpoints</h6>
+                                    <ul class="api-endpoints">
+                                        <li><code>/api/analyze</code> - Complete analysis</li>
+                                        <li><code>/api/predict</code> - Basic classification</li>
+                                        <li><code>/api/habitability</code> - Habitability analysis</li>
+                                        <li><code>/api/batch</code> - Batch processing</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

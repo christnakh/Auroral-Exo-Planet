@@ -1,0 +1,258 @@
+{% extends "base.html" %}
+
+{% block title %}🔬 Scientific Features - ExoplanetML{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-5 mt-5">
+    <!-- Features Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card bg-dark border-primary">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-cogs me-2"></i>
+                        Scientific Features Overview
+                    </h4>
+                    <p class="mb-0 mt-2">Advanced scientific analysis capabilities for exoplanet research</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Grid -->
+    <div class="row mb-4">
+        <div class="col-lg-6 mb-4">
+            <div class="card bg-dark border-success h-100">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-leaf me-2"></i>
+                        Habitability Analysis
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted">
+                        Calculate planetary habitability scores using multiple scientific criteria including 
+                        habitable zone position, equilibrium temperature, and planetary characteristics.
+                    </p>
+                    <ul class="list-unstyled small text-muted">
+                        <li>• Habitable zone calculations</li>
+                        <li>• Equilibrium temperature analysis</li>
+                        <li>• Size and stellar compatibility</li>
+                        <li>• Combined habitability scoring</li>
+                    </ul>
+                    <div class="d-grid">
+                        <a href="{{ url_for('habitability_feature') }}" class="btn btn-outline-success">
+                            <i class="fas fa-arrow-right me-2"></i>Explore Habitability
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 mb-4">
+            <div class="card bg-dark border-danger h-100">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        Anomaly Detection
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted">
+                        Identify unusual exoplanet systems and rare configurations using advanced 
+                        statistical methods and machine learning techniques.
+                    </p>
+                    <ul class="list-unstyled small text-muted">
+                        <li>• Isolation Forest algorithm</li>
+                        <li>• Statistical outlier detection</li>
+                        <li>• Rare system identification</li>
+                        <li>• Multi-planet system analysis</li>
+                    </ul>
+                    <div class="d-grid">
+                        <a href="{{ url_for('anomaly_detection_feature') }}" class="btn btn-outline-danger">
+                            <i class="fas fa-arrow-right me-2"></i>Detect Anomalies
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 mb-4">
+            <div class="card bg-dark border-info h-100">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-brain me-2"></i>
+                        Explainable AI
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted">
+                        Understand model decisions with advanced explainability techniques including 
+                        SHAP values, LIME explanations, and feature importance analysis.
+                    </p>
+                    <ul class="list-unstyled small text-muted">
+                        <li>• SHAP value analysis</li>
+                        <li>• LIME local explanations</li>
+                        <li>• Feature importance ranking</li>
+                        <li>• Model interpretability</li>
+                    </ul>
+                    <div class="d-grid">
+                        <a href="{{ url_for('explainability_feature') }}" class="btn btn-outline-info">
+                            <i class="fas fa-arrow-right me-2"></i>Understand AI
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 mb-4">
+            <div class="card bg-dark border-warning h-100">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0">
+                        <i class="fas fa-satellite me-2"></i>
+                        Cross-Mission Validation
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted">
+                        Validate model performance across different space missions and instruments 
+                        to ensure robust generalization and identify mission-specific biases.
+                    </p>
+                    <ul class="list-unstyled small text-muted">
+                        <li>• Kepler to TESS validation</li>
+                        <li>• Mission bias analysis</li>
+                        <li>• Generalization testing</li>
+                        <li>• Cross-instrument compatibility</li>
+                    </ul>
+                    <div class="d-grid">
+                        <a href="{{ url_for('cross_mission_feature') }}" class="btn btn-outline-warning">
+                            <i class="fas fa-arrow-right me-2"></i>Validate Models
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Feature Capabilities -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card bg-dark border-secondary">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-chart-line me-2"></i>
+                        Feature Capabilities
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="text-center">
+                                <i class="fas fa-calculator fa-2x text-primary mb-3"></i>
+                                <h6 class="text-primary">Real-time Analysis</h6>
+                                <p class="text-muted small">Instant calculations and predictions</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="text-center">
+                                <i class="fas fa-database fa-2x text-success mb-3"></i>
+                                <h6 class="text-success">NASA Integration</h6>
+                                <p class="text-muted small">Live data from space missions</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="text-center">
+                                <i class="fas fa-chart-bar fa-2x text-info mb-3"></i>
+                                <h6 class="text-info">Visualization</h6>
+                                <p class="text-muted small">Interactive charts and graphs</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="text-center">
+                                <i class="fas fa-download fa-2x text-warning mb-3"></i>
+                                <h6 class="text-warning">Export Results</h6>
+                                <p class="text-muted small">Download analysis reports</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scientific Methods -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card bg-dark border-primary">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-microscope me-2"></i>
+                        Scientific Methods & Algorithms
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="text-primary">Machine Learning Models</h6>
+                            <ul class="list-unstyled small text-muted">
+                                <li>• <strong>XGBoost:</strong> Gradient boosting for classification</li>
+                                <li>• <strong>Random Forest:</strong> Ensemble decision trees</li>
+                                <li>• <strong>CNN:</strong> Convolutional neural networks for light curves</li>
+                                <li>• <strong>Hybrid Models:</strong> Multi-modal ensemble approaches</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-primary">Scientific Algorithms</h6>
+                            <ul class="list-unstyled small text-muted">
+                                <li>• <strong>Isolation Forest:</strong> Anomaly detection</li>
+                                <li>• <strong>SHAP/LIME:</strong> Model explainability</li>
+                                <li>• <strong>Habitable Zone:</strong> Stellar flux calculations</li>
+                                <li>• <strong>Cross-Validation:</strong> Robust model testing</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Access -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card bg-dark border-success">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-rocket me-2"></i>
+                        Quick Access
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="d-grid">
+                                <a href="{{ url_for('analyze') }}" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-search me-2"></i>Single Analysis
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="d-grid">
+                                <a href="{{ url_for('batch') }}" class="btn btn-info btn-lg">
+                                    <i class="fas fa-layer-group me-2"></i>Batch Processing
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="d-grid">
+                                <a href="{{ url_for('dashboard') }}" class="btn btn-warning btn-lg">
+                                    <i class="fas fa-chart-line me-2"></i>Dashboard
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

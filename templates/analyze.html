@@ -1,0 +1,620 @@
+{% extends "base.html" %}
+
+{% block title %}🔍 Single Exoplanet Analysis - AurOracle{% endblock %}
+
+{% block content %}
+<div class="analyze-page">
+    <div class="analyze-container">
+        <!-- Input Form -->
+        <div class="input-section">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-search me-2"></i>
+                        AurOracle Exoplanet Analysis
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <form id="analysisForm">
+                        <div class="form-group">
+                            <label for="orbital_period">
+                                <i class="fas fa-clock me-1"></i>Orbital Period (days)
+                            </label>
+                            <input type="number" id="orbital_period" 
+                                   placeholder="Enter orbital period in days" step="any" required>
+                            <small class="text-muted">Earth = 365.25 days</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="planet_radius">
+                                <i class="fas fa-globe me-1"></i>Planet Radius (Earth radii)
+                            </label>
+                            <input type="number" id="planet_radius" 
+                                   placeholder="Enter planet radius in Earth radii" step="any" required>
+                            <small class="text-muted">Earth = 1.0</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="stellar_temp">
+                                <i class="fas fa-sun me-1"></i>Stellar Temperature (K)
+                            </label>
+                            <input type="number" id="stellar_temp" 
+                                   placeholder="Enter stellar temperature in Kelvin" step="any" required>
+                            <small class="text-muted">Sun = 5778 K</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="stellar_radius">
+                                <i class="fas fa-circle me-1"></i>Stellar Radius (Solar radii)
+                            </label>
+                            <input type="number" id="stellar_radius" 
+                                   placeholder="Enter stellar radius in solar radii" step="any" required>
+                            <small class="text-muted">Sun = 1.0</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="stellar_mag">
+                                <i class="fas fa-star me-1"></i>Stellar Magnitude
+                            </label>
+                            <input type="number" id="stellar_mag" 
+                                   placeholder="Enter stellar magnitude" step="any" required>
+                            <small class="text-muted">Apparent magnitude</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="transit_depth">
+                                <i class="fas fa-chart-line me-1"></i>Transit Depth
+                            </label>
+                            <input type="number" id="transit_depth" 
+                                   placeholder="Enter transit depth" step="any" required>
+                            <small class="text-muted">Fractional depth</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="transit_duration">
+                                <i class="fas fa-hourglass-half me-1"></i>Transit Duration (days)
+                            </label>
+                            <input type="number" id="transit_duration" 
+                                   placeholder="Enter transit duration in days" step="any" required>
+                            <small class="text-muted">Transit duration</small>
+                        </div>
+
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="include_explanations">
+                            <label for="include_explanations">
+                                <i class="fas fa-brain me-1"></i>Include AI Explanations
+                            </label>
+                        </div>
+
+                        <div style="display: flex; flex-direction: column; gap: 10px;">
+                            <button type="submit" class="btn primary-btn" style="display:none;">
+                                <i class="fas fa-rocket me-2"></i>Analyze Exoplanet
+                            </button>
+                            <div class="test-data-buttons" style="display: flex; gap: 5px; flex-wrap: wrap;">
+                                <button type="button" class="btn btn-success btn-sm" onclick="loadTestData('confirmed')">
+                                    <i class="fas fa-check me-1"></i>Confirmed
+                                </button>
+                                <button type="button" class="btn btn-warning btn-sm" onclick="loadTestData('candidate')">
+                                    <i class="fas fa-question me-1"></i>Good Candidate
+                                </button>
+                                <button type="button" class="btn btn-info btn-sm" onclick="loadTestData('epic_candidate')">
+                                    <i class="fas fa-star me-1"></i>EPIC 220192485.01
+                                </button>
+                                <button type="button" class="btn btn-info btn-sm" onclick="loadTestData('k2_candidate')">
+                                    <i class="fas fa-rocket me-1"></i>K2-151 b
+                                </button>
+                                <button type="button" class="btn btn-danger btn-sm" onclick="loadTestData('false_positive')">
+                                    <i class="fas fa-times me-1"></i>False Positive
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results -->
+        <div class="results-section">
+            <!-- Loading State -->
+            <div id="loadingState" class="text-center py-5" style="display: none;">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <h5 class="mt-3">Analyzing Exoplanet...</h5>
+                <p class="text-muted">Running ML models and scientific analysis</p>
+            </div>
+
+            <!-- Simple Batch Test (inline) -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-vial me-2"></i>Quick Batch Test</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-2 align-items-center">
+                        <div class="col-md-6">
+                            <input type="file" id="batchCsv" accept=".csv" class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                            <button class="btn secondary-btn btn-sm" onclick="downloadSimpleSample()"><i class="fas fa-download me-1"></i>Sample CSV</button>
+                            <button class="btn primary-btn btn-sm" onclick="runInlineBatch()"><i class="fas fa-play me-1"></i>Run</button>
+                        </div>
+                    </div>
+                    <div class="table-responsive mt-3" style="display:none;" id="inlineBatchResults">
+                        <table class="table">
+                            <thead><tr><th>#</th><th>Prediction</th><th>Confidence</th></tr></thead>
+                            <tbody id="inlineBatchBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Container -->
+            <div id="resultsContainer" style="display: none;">
+                <!-- Classification Results -->
+                <div class="card bg-dark border-success mb-4">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-check-circle me-2"></i>
+                            Classification Results
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6 class="text-primary">Prediction</h6>
+                                <div class="alert alert-info" id="predictionResult">
+                                    <strong id="predictionText">-</strong>
+                                    <span class="badge bg-primary ms-2" id="confidenceBadge">-</span>
+                                </div>
+                                <small class="text-muted">Confidence: How certain the model is about this prediction</small>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="text-primary">Model Probabilities</h6>
+                                <div class="probability-display">
+                                    <div class="probability-item">
+                                        <span class="label">Confirmed:</span>
+                                        <span class="value" id="probConfirmed">-</span>
+                                    </div>
+                                    <div class="probability-item">
+                                        <span class="label">Candidate:</span>
+                                        <span class="value" id="probCandidate">-</span>
+                                    </div>
+                                    <div class="probability-item">
+                                        <span class="label">False Positive:</span>
+                                        <span class="value" id="probFalsePositive">-</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <h6 class="text-primary">What do these classifications mean?</h6>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="alert alert-success small">
+                                        <strong>Confirmed:</strong> Planet verified through multiple observations
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="alert alert-warning small">
+                                        <strong>Candidate:</strong> Potential planet, needs verification
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="alert alert-danger small">
+                                        <strong>False Positive:</strong> Not a real planet, likely instrumental artifact
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Explainability (when available) -->
+                <div id="explainabilitySection" class="card bg-dark border-primary mb-4" style="display: none;">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-brain me-2"></i>
+                            Model Explainability
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6 class="text-primary">Top Features (SHAP)</h6>
+                                <ul id="shapTopFeatures" class="text-muted small mb-0"></ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="text-primary">Top Features (LIME)</h6>
+                                <ul id="limeTopFeatures" class="text-muted small mb-0"></ul>
+                            </div>
+                        </div>
+                        <small class="text-muted d-block mt-2">Explanations appear when "Include AI Explanations" is checked.</small>
+                    </div>
+                </div>
+
+                <!-- Habitability Analysis -->
+                <div class="card bg-dark border-warning mb-4">
+                    <div class="card-header bg-warning text-dark">
+                        <h5 class="mb-0">
+                            <i class="fas fa-leaf me-2"></i>
+                            Habitability Analysis
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="text-center">
+                                    <h3 class="text-warning" id="habitabilityScore">-</h3>
+                                    <p class="mb-0">Habitability Score</p>
+                                    <small class="text-muted">0.0 = Not Habitable, 1.0 = Highly Habitable</small>
+                                    <div class="progress mt-2" style="height: 8px;">
+                                        <div class="progress-bar bg-warning" id="habitabilityProgress" 
+                                             role="progressbar" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="text-center">
+                                    <h5 class="text-info" id="equilibriumTemp">-</h5>
+                                    <p class="mb-0">Equilibrium Temperature (K)</p>
+                                    <small class="text-muted">Surface temperature without atmosphere</small>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="text-center">
+                                    <h5 class="text-success" id="habitableZone">-</h5>
+                                    <p class="mb-0">In Habitable Zone</p>
+                                    <small class="text-muted">Distance allows liquid water</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <h6 class="text-primary">What is Habitability?</h6>
+                            <p class="text-muted small">
+                                Habitability measures how suitable a planet is for life as we know it. 
+                                The score considers factors like temperature, distance from star, and planet size. 
+                                A score above 0.7 indicates high potential for habitability.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Anomaly Detection -->
+                <div class="card bg-dark border-danger mb-4">
+                    <div class="card-header bg-danger text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            Anomaly Detection
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6 class="text-primary">Anomaly Status</h6>
+                                <div id="anomalyStatus" class="alert">-</div>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="text-primary">Anomaly Score</h6>
+                                <div class="progress" style="height: 20px;">
+                                    <div class="progress-bar bg-danger" id="anomalyProgress" 
+                                         role="progressbar" style="width: 0%"></div>
+                                </div>
+                                <small class="text-muted" id="anomalyType">-</small>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <h6 class="text-primary">What is Anomaly Detection?</h6>
+                            <p class="text-muted small">
+                                Anomaly detection identifies unusual patterns in exoplanet data that might indicate 
+                                data quality issues, instrumental artifacts, or genuinely unusual planetary systems. 
+                                High anomaly scores suggest the data may need special attention.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                
+            </div>
+
+            <!-- Error State -->
+            <div id="errorState" class="alert alert-danger" style="display: none;">
+                <h5><i class="fas fa-exclamation-circle me-2"></i>Analysis Error</h5>
+                <p id="errorMessage">An error occurred during analysis.</p>
+                <button class="btn btn-outline-danger" onclick="retryAnalysis()">
+                    <i class="fas fa-redo me-2"></i>Retry Analysis
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+// Chart.js is available but charts are not used on this page
+
+// Global variables to prevent infinite loops
+let isAnalyzing = false;
+
+// Initialize page
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Analyze page loaded successfully');
+    
+    // Hide any error states on page load
+    document.getElementById('errorState').style.display = 'none';
+    document.getElementById('loadingState').style.display = 'none';
+    document.getElementById('resultsContainer').style.display = 'none';
+});
+
+document.getElementById('analysisForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    if (!isAnalyzing) {
+        analyzeExoplanet();
+    }
+});
+
+function analyzeExoplanet() {
+    if (isAnalyzing) {
+        console.log('Analysis already in progress');
+        return;
+    }
+    
+    isAnalyzing = true;
+    
+    // Validate form data first
+    const orbital_period = document.getElementById('orbital_period').value;
+    const planet_radius = document.getElementById('planet_radius').value;
+    const stellar_temp = document.getElementById('stellar_temp').value;
+    const stellar_radius = document.getElementById('stellar_radius').value;
+    const stellar_mag = document.getElementById('stellar_mag').value;
+    const transit_depth = document.getElementById('transit_depth').value;
+    const transit_duration = document.getElementById('transit_duration').value;
+    
+    // Check if all required fields are filled
+    if (!orbital_period || !planet_radius || !stellar_temp || !stellar_radius || !stellar_mag || !transit_depth || !transit_duration) {
+        alert('Please fill in all required fields before analyzing.');
+        isAnalyzing = false;
+        return;
+    }
+    
+    // Show loading state
+    document.getElementById('loadingState').style.display = 'block';
+    document.getElementById('resultsContainer').style.display = 'none';
+    document.getElementById('errorState').style.display = 'none';
+
+    // Collect form data
+    const formData = {
+        orbital_period: parseFloat(orbital_period),
+        planet_radius: parseFloat(planet_radius),
+        stellar_temp: parseFloat(stellar_temp),
+        stellar_radius: parseFloat(stellar_radius),
+        stellar_mag: parseFloat(stellar_mag),
+        transit_depth: parseFloat(transit_depth),
+        transit_duration: parseFloat(transit_duration),
+        include_explanations: document.getElementById('include_explanations').checked
+    };
+
+    // Make API call
+    fetch('/api/analyze', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        document.getElementById('loadingState').style.display = 'none';
+        document.getElementById('resultsContainer').style.display = 'block';
+        displayResults(data);
+        isAnalyzing = false;
+    })
+    .catch(error => {
+        console.error('Analysis error:', error);
+        document.getElementById('loadingState').style.display = 'none';
+        document.getElementById('errorState').style.display = 'block';
+        document.getElementById('errorMessage').textContent = `Analysis failed: ${error.message}`;
+        isAnalyzing = false;
+        
+        // Show a more user-friendly error message
+        alert('Analysis failed. Please check your input values and try again.');
+    });
+}
+
+function displayResults(data) {
+    try {
+        console.log('Received data:', data);
+        
+        // Classification results
+        if (data.classification) {
+            const classification = data.classification;
+            document.getElementById('predictionText').textContent = classification.prediction || 'Unknown';
+            document.getElementById('confidenceBadge').textContent = `${((classification.confidence || 0) * 100).toFixed(1)}%`;
+            
+            // Update probability display
+            if (classification.probabilities) {
+                document.getElementById('probConfirmed').textContent = `${(classification.probabilities.confirmed * 100).toFixed(1)}%`;
+                document.getElementById('probCandidate').textContent = `${(classification.probabilities.candidate * 100).toFixed(1)}%`;
+                document.getElementById('probFalsePositive').textContent = `${(classification.probabilities.false_positive * 100).toFixed(1)}%`;
+            }
+        }
+        
+        // Habitability results
+        if (data.habitability) {
+            const habitability = data.habitability;
+            document.getElementById('habitabilityScore').textContent = (habitability.habitability_score || 0).toFixed(3);
+            document.getElementById('habitabilityProgress').style.width = `${(habitability.habitability_score || 0) * 100}%`;
+            document.getElementById('equilibriumTemp').textContent = (habitability.equilibrium_temp || 0).toFixed(1);
+            document.getElementById('habitableZone').textContent = habitability.is_habitable ? 'Yes' : 'No';
+        } else {
+            // Set default values if habitability data is missing
+            document.getElementById('habitabilityScore').textContent = '0.000';
+            document.getElementById('habitabilityProgress').style.width = '0%';
+            document.getElementById('equilibriumTemp').textContent = '0.0';
+            document.getElementById('habitableZone').textContent = 'No';
+        }
+        
+        // Anomaly detection
+        if (data.anomaly_detection) {
+            const anomaly = data.anomaly_detection;
+            const anomalyStatus = document.getElementById('anomalyStatus');
+            if (anomaly.is_anomaly) {
+                anomalyStatus.className = 'alert alert-danger';
+                anomalyStatus.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>Anomaly Detected';
+            } else {
+                anomalyStatus.className = 'alert alert-success';
+                anomalyStatus.innerHTML = '<i class="fas fa-check-circle me-2"></i>Normal System';
+            }
+            document.getElementById('anomalyProgress').style.width = `${anomaly.confidence || 0}%`;
+            document.getElementById('anomalyType').textContent = anomaly.anomaly_type || 'Unknown';
+        } else {
+            // Set default values if anomaly data is missing
+            const anomalyStatus = document.getElementById('anomalyStatus');
+            anomalyStatus.className = 'alert alert-info';
+            anomalyStatus.innerHTML = '<i class="fas fa-info-circle me-2"></i>Analysis Pending';
+            document.getElementById('anomalyProgress').style.width = '0%';
+            document.getElementById('anomalyType').textContent = 'Not analyzed';
+        }
+        
+        // Model performance removed
+
+        // Explanations
+        try {
+            const explainabilitySection = document.getElementById('explainabilitySection');
+            if (data.explanations && (data.explanations.xgboost_shap || data.explanations.lime)) {
+                explainabilitySection.style.display = 'block';
+                // SHAP top features
+                const shapList = document.getElementById('shapTopFeatures');
+                shapList.innerHTML = '';
+                if (data.explanations.xgboost_shap && data.explanations.xgboost_shap.top_features) {
+                    data.explanations.xgboost_shap.top_features.forEach(function(item) {
+                        const li = document.createElement('li');
+                        li.textContent = `${item[0]}: ${Number(item[1]).toFixed(4)}`;
+                        shapList.appendChild(li);
+                    });
+                }
+
+                // LIME top features
+                const limeList = document.getElementById('limeTopFeatures');
+                limeList.innerHTML = '';
+                if (data.explanations.lime && data.explanations.lime.top_features) {
+                    data.explanations.lime.top_features.forEach(function(item) {
+                        const li = document.createElement('li');
+                        li.textContent = `${item[0]}: ${Number(item[1]).toFixed(4)}`;
+                        limeList.appendChild(li);
+                    });
+                }
+            } else {
+                explainabilitySection.style.display = 'none';
+            }
+        } catch (e) {
+            console.warn('Explainability render error:', e);
+        }
+    } catch (error) {
+        console.error('Error displaying results:', error);
+        alert('Error displaying results: ' + error.message);
+    }
+}
+
+function loadTestData(type) {
+    const testData = {
+        'confirmed': {
+            orbital_period: 365,
+            planet_radius: 1.0,
+            stellar_temp: 5800,
+            stellar_radius: 1.0,
+            stellar_mag: 12.0,
+            transit_depth: 0.01,
+            transit_duration: 0.1
+        },
+        'candidate': {
+            orbital_period: 15.0,
+            planet_radius: 2.0,
+            stellar_temp: 5800,
+            stellar_radius: 1.0,
+            stellar_mag: 12.0,
+            transit_depth: 0.002,
+            transit_duration: 0.125
+        },
+        'epic_candidate': {
+            orbital_period: 50.69,
+            planet_radius: 0.79,
+            stellar_temp: 5805,
+            stellar_radius: 0.79,
+            stellar_mag: 15.597,
+            transit_depth: 0.000009947,
+            transit_duration: 0.046
+        },
+        'k2_candidate': {
+            orbital_period: 3.84,
+            planet_radius: 0.13,
+            stellar_temp: 4537,
+            stellar_radius: 0.13,
+            stellar_mag: 15.784,
+            transit_depth: 0.000010117,
+            transit_duration: 0.064
+        },
+        'false_positive': {
+            orbital_period: 0.8,
+            planet_radius: 0.3,
+            stellar_temp: 8000,
+            stellar_radius: 1.8,
+            stellar_mag: 5.2,
+            transit_depth: 0.35,
+            transit_duration: 0.005
+        }
+    };
+    
+    const data = testData[type];
+    document.getElementById('orbital_period').value = data.orbital_period;
+    document.getElementById('planet_radius').value = data.planet_radius;
+    document.getElementById('stellar_temp').value = data.stellar_temp;
+    document.getElementById('stellar_radius').value = data.stellar_radius;
+    document.getElementById('stellar_mag').value = data.stellar_mag;
+    document.getElementById('transit_depth').value = data.transit_depth;
+    document.getElementById('transit_duration').value = data.transit_duration;
+}
+
+function retryAnalysis() {
+    document.getElementById('errorState').style.display = 'none';
+    analyzeExoplanet();
+}
+</script>
+
+<style>
+.probability-display {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 10px;
+}
+
+.probability-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    padding: 5px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.probability-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.probability-item .label {
+    font-weight: 600;
+    color: #fff;
+}
+
+.probability-item .value {
+    font-weight: 700;
+    color: #17a2b8;
+}
+</style>
+{% endblock %}

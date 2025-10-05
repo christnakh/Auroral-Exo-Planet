@@ -1,0 +1,749 @@
+{% extends "base.html" %}
+
+{% block title %}🤖 ML Models Overview - ExoplanetML{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-5 mt-5">
+    <!-- Models Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card border-primary">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-robot me-2"></i>
+                        Machine Learning Models Overview
+                    </h4>
+                    <p class="mb-0 mt-2">Comprehensive overview of all ML models and their performance metrics</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Model Performance Summary -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card border-success text-center">
+                <div class="card-body">
+                    <i class="fas fa-chart-line fa-2x text-success mb-3"></i>
+                    <h3 class="text-success">83.5%</h3>
+                    <p class="mb-0">Best Accuracy</p>
+                    <small class="text-muted">Hybrid Model</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-info text-center">
+                <div class="card-body">
+                    <i class="fas fa-brain fa-2x text-info mb-3"></i>
+                    <h3 class="text-info">5</h3>
+                    <p class="mb-0">Total Models</p>
+                    <small class="text-muted">Active Models</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-warning text-center">
+                <div class="card-body">
+                    <i class="fas fa-database fa-2x text-warning mb-3"></i>
+                    <h3 class="text-warning">5.5K</h3>
+                    <p class="mb-0">Training Samples</p>
+                    <small class="text-muted">Exoplanet Data</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-danger text-center">
+                <div class="card-body">
+                    <i class="fas fa-clock fa-2x text-danger mb-3"></i>
+                    <h3 class="text-danger">125ms</h3>
+                    <p class="mb-0">Avg Processing</p>
+                    <small class="text-muted">Per Prediction</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabular Models -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card bg-dark border-secondary">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-table me-2"></i>
+                        Tabular Models
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <!-- XGBoost Model -->
+                        <div class="col-lg-4 mb-4">
+                            <div class="card bg-dark border-success h-100">
+                                <div class="card-header bg-success text-white">
+                                    <h6 class="mb-0">
+                                        <i class="fas fa-rocket me-2"></i>
+                                        XGBoost Classifier
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <h6 class="text-primary">Performance Metrics</h6>
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <div class="text-center">
+                                                    <h5 class="text-success">80.4%</h5>
+                                                    <small class="text-muted">Accuracy</small>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="text-center">
+                                                    <h5 class="text-info">92.9%</h5>
+                                                    <small class="text-muted">AUC</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <h6 class="text-primary">Model Details</h6>
+                                        <ul class="list-unstyled small">
+                                            <li><strong>Algorithm:</strong> Gradient Boosting</li>
+                                            <li><strong>Features:</strong> 14 tabular features</li>
+                                            <li><strong>Training Time:</strong> 2.5 minutes</li>
+                                            <li><strong>Prediction Time:</strong> 15ms</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <h6 class="text-primary">Key Features</h6>
+                                        <div class="progress mb-1" style="height: 8px;">
+                                            <div class="progress-bar bg-success" style="width: 25%"></div>
+                                        </div>
+                                        <small class="text-muted">Planet Radius (25%)</small>
+                                        
+                                        <div class="progress mb-1" style="height: 8px;">
+                                            <div class="progress-bar bg-info" style="width: 20%"></div>
+                                        </div>
+                                        <small class="text-muted">Stellar Temperature (20%)</small>
+                                        
+                                        <div class="progress mb-1" style="height: 8px;">
+                                            <div class="progress-bar bg-warning" style="width: 18%"></div>
+                                        </div>
+                                        <small class="text-muted">Orbital Period (18%)</small>
+                                    </div>
+                                    
+                                    <div class="d-grid">
+                                        <button class="btn btn-outline-success btn-sm" onclick="testModel('xgboost')">
+                                            <i class="fas fa-play me-1"></i>Test Model
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Random Forest Model -->
+                        <div class="col-lg-4 mb-4">
+                            <div class="card bg-dark border-info h-100">
+                                <div class="card-header bg-info text-white">
+                                    <h6 class="mb-0">
+                                        <i class="fas fa-tree me-2"></i>
+                                        Random Forest
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <h6 class="text-primary">Performance Metrics</h6>
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <div class="text-center">
+                                                    <h5 class="text-info">78.0%</h5>
+                                                    <small class="text-muted">Accuracy</small>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="text-center">
+                                                    <h5 class="text-info">91.9%</h5>
+                                                    <small class="text-muted">AUC</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <h6 class="text-primary">Model Details</h6>
+                                        <ul class="list-unstyled small">
+                                            <li><strong>Algorithm:</strong> Ensemble of Trees</li>
+                                            <li><strong>Features:</strong> 14 tabular features</li>
+                                            <li><strong>Training Time:</strong> 1.8 minutes</li>
+                                            <li><strong>Prediction Time:</strong> 12ms</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <h6 class="text-primary">Advantages</h6>
+                                        <ul class="list-unstyled small text-muted">
+                                            <li>• Robust to outliers</li>
+                                            <li>• Handles missing values well</li>
+                                            <li>• Provides feature importance</li>
+                                            <li>• Less prone to overfitting</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div class="d-grid">
+                                        <button class="btn btn-outline-info btn-sm" onclick="testModel('random_forest')">
+                                            <i class="fas fa-play me-1"></i>Test Model
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Ensemble Model -->
+                        <div class="col-lg-4 mb-4">
+                            <div class="card bg-dark border-warning h-100">
+                                <div class="card-header bg-warning text-dark">
+                                    <h6 class="mb-0">
+                                        <i class="fas fa-layer-group me-2"></i>
+                                        Ensemble Model
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <h6 class="text-primary">Performance Metrics</h6>
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <div class="text-center">
+                                                    <h5 class="text-warning">79.8%</h5>
+                                                    <small class="text-muted">Accuracy</small>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="text-center">
+                                                    <h5 class="text-warning">92.8%</h5>
+                                                    <small class="text-muted">AUC</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <h6 class="text-primary">Model Details</h6>
+                                        <ul class="list-unstyled small">
+                                            <li><strong>Algorithm:</strong> Weighted Average</li>
+                                            <li><strong>Components:</strong> XGBoost + Random Forest</li>
+                                            <li><strong>Weights:</strong> 60% XGBoost, 40% RF</li>
+                                            <li><strong>Prediction Time:</strong> 18ms</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <h6 class="text-primary">Benefits</h6>
+                                        <ul class="list-unstyled small text-muted">
+                                            <li>• Combines model strengths</li>
+                                            <li>• Reduces individual model bias</li>
+                                            <li>• More stable predictions</li>
+                                            <li>• Better generalization</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div class="d-grid">
+                                        <button class="btn btn-outline-warning btn-sm" onclick="testModel('ensemble')">
+                                            <i class="fas fa-play me-1"></i>Test Model
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Deep Learning Models -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card bg-dark border-primary">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-brain me-2"></i>
+                        Deep Learning Models
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <!-- CNN Model -->
+                        <div class="col-lg-6 mb-4">
+                            <div class="card bg-dark border-info h-100">
+                                <div class="card-header bg-info text-white">
+                                    <h6 class="mb-0">
+                                        <i class="fas fa-project-diagram me-2"></i>
+                                        Convolutional Neural Network (CNN)
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <h6 class="text-primary">Performance Metrics</h6>
+                                        <div class="row">
+                                            <div class="col-4">
+                                                <div class="text-center">
+                                                    <h5 class="text-info">82.1%</h5>
+                                                    <small class="text-muted">Accuracy</small>
+                                                </div>
+                                            </div>
+                                            <div class="col-4">
+                                                <div class="text-center">
+                                                    <h5 class="text-info">94.2%</h5>
+                                                    <small class="text-muted">AUC</small>
+                                                </div>
+                                            </div>
+                                            <div class="col-4">
+                                                <div class="text-center">
+                                                    <h5 class="text-info">0.82</h5>
+                                                    <small class="text-muted">F1-Score</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <h6 class="text-primary">Architecture</h6>
+                                        <ul class="list-unstyled small">
+                                            <li><strong>Type:</strong> 1D CNN for Time Series</li>
+                                            <li><strong>Input:</strong> Light curve data (1000 points)</li>
+                                            <li><strong>Layers:</strong> 3 Conv + 2 Dense</li>
+                                            <li><strong>Parameters:</strong> 1.2M trainable</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <h6 class="text-primary">Training Details</h6>
+                                        <ul class="list-unstyled small">
+                                            <li><strong>Epochs:</strong> 100</li>
+                                            <li><strong>Batch Size:</strong> 32</li>
+                                            <li><strong>Training Time:</strong> 45 minutes</li>
+                                            <li><strong>Prediction Time:</strong> 8ms</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div class="d-grid">
+                                        <button class="btn btn-outline-info btn-sm" onclick="testModel('cnn')">
+                                            <i class="fas fa-play me-1"></i>Test Model
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Hybrid Model -->
+                        <div class="col-lg-6 mb-4">
+                            <div class="card bg-dark border-success h-100">
+                                <div class="card-header bg-success text-white">
+                                    <h6 class="mb-0">
+                                        <i class="fas fa-link me-2"></i>
+                                        Hybrid Model
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <h6 class="text-primary">Performance Metrics</h6>
+                                        <div class="row">
+                                            <div class="col-4">
+                                                <div class="text-center">
+                                                    <h5 class="text-success">83.5%</h5>
+                                                    <small class="text-muted">Accuracy</small>
+                                                </div>
+                                            </div>
+                                            <div class="col-4">
+                                                <div class="text-center">
+                                                    <h5 class="text-success">95.1%</h5>
+                                                    <small class="text-muted">AUC</small>
+                                                </div>
+                                            </div>
+                                            <div class="col-4">
+                                                <div class="text-center">
+                                                    <h5 class="text-success">0.84</h5>
+                                                    <small class="text-muted">F1-Score</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <h6 class="text-primary">Architecture</h6>
+                                        <ul class="list-unstyled small">
+                                            <li><strong>Type:</strong> Multi-Modal Ensemble</li>
+                                            <li><strong>Components:</strong> CNN + XGBoost + Random Forest</li>
+                                            <li><strong>Weights:</strong> 40% CNN, 30% XGB, 30% RF</li>
+                                            <li><strong>Features:</strong> Light curves + Tabular</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <h6 class="text-primary">Advantages</h6>
+                                        <ul class="list-unstyled small text-muted">
+                                            <li>• Best overall performance</li>
+                                            <li>• Combines multiple data types</li>
+                                            <li>• Robust to different scenarios</li>
+                                            <li>• State-of-the-art accuracy</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div class="d-grid">
+                                        <button class="btn btn-outline-success btn-sm" onclick="testModel('hybrid')">
+                                            <i class="fas fa-play me-1"></i>Test Model
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Model Comparison Chart -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card bg-dark border-secondary">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-chart-bar me-2"></i>
+                        Model Performance Comparison
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="modelComparisonChart" height="100"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Feature Importance -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card bg-dark border-warning">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0">
+                        <i class="fas fa-brain me-2"></i>
+                        Feature Importance Analysis
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <canvas id="featureImportanceChart" height="200"></canvas>
+                        </div>
+                        <div class="col-lg-4">
+                            <h6 class="text-primary">Top Features</h6>
+                            <ol class="text-muted">
+                                <li><strong>Planet Radius</strong> - 25% importance</li>
+                                <li><strong>Stellar Temperature</strong> - 20% importance</li>
+                                <li><strong>Orbital Period</strong> - 18% importance</li>
+                                <li><strong>Transit Depth</strong> - 15% importance</li>
+                                <li><strong>Stellar Radius</strong> - 12% importance</li>
+                                <li><strong>Transit SNR</strong> - 10% importance</li>
+                            </ol>
+                            
+                            <h6 class="text-primary mt-3">Feature Categories</h6>
+                            <ul class="list-unstyled small text-muted">
+                                <li>• <strong>Planetary:</strong> Radius, orbital parameters</li>
+                                <li>• <strong>Stellar:</strong> Temperature, radius, magnitude</li>
+                                <li>• <strong>Transit:</strong> Depth, duration, SNR</li>
+                                <li>• <strong>Derived:</strong> Log features, duty cycle</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Model Training Information -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card bg-dark border-info">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-cogs me-2"></i>
+                        Model Training Information
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <h6 class="text-primary">Dataset Information</h6>
+                            <ul class="list-unstyled small text-muted">
+                                <li><strong>Total Samples:</strong> 5,500 exoplanets</li>
+                                <li><strong>Training Set:</strong> 4,400 (80%)</li>
+                                <li><strong>Validation Set:</strong> 550 (10%)</li>
+                                <li><strong>Test Set:</strong> 550 (10%)</li>
+                                <li><strong>Features:</strong> 14 tabular + light curves</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <h6 class="text-primary">Data Sources</h6>
+                            <ul class="list-unstyled small text-muted">
+                                <li>• <strong>Kepler:</strong> KOI cumulative data</li>
+                                <li>• <strong>TESS:</strong> TOI data</li>
+                                <li>• <strong>K2:</strong> K2PandC data</li>
+                                <li>• <strong>NASA Archive:</strong> Latest discoveries</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <h6 class="text-primary">Training Process</h6>
+                            <ul class="list-unstyled small text-muted">
+                                <li><strong>Preprocessing:</strong> Standardization, cleaning</li>
+                                <li><strong>Cross-validation:</strong> 5-fold CV</li>
+                                <li><strong>Hyperparameter tuning:</strong> Grid search</li>
+                                <li><strong>Regularization:</strong> L1/L2, dropout</li>
+                                <li><strong>Early stopping:</strong> Prevent overfitting</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Model Testing Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card bg-dark border-success">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-flask me-2"></i>
+                        Model Testing Interface
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="text-primary">Test Parameters</h6>
+                            <div class="mb-3">
+                                <label for="testOrbitalPeriod" class="form-label">Orbital Period (days)</label>
+                                <input type="number" class="form-control" id="testOrbitalPeriod" value="365.25">
+                            </div>
+                            <div class="mb-3">
+                                <label for="testPlanetRadius" class="form-label">Planet Radius (Earth radii)</label>
+                                <input type="number" class="form-control" id="testPlanetRadius" value="1.0">
+                            </div>
+                            <div class="mb-3">
+                                <label for="testStellarTemp" class="form-label">Stellar Temperature (K)</label>
+                                <input type="number" class="form-control" id="testStellarTemp" value="5800">
+                            </div>
+                            <div class="mb-3">
+                                <label for="testStellarRadius" class="form-label">Stellar Radius (Solar radii)</label>
+                                <input type="number" class="form-control" id="testStellarRadius" value="1.0">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-primary">Test Results</h6>
+                            <div id="testResults" class="bg-dark text-light p-3 rounded" style="min-height: 200px;">
+                                <p class="text-muted">Select a model to test with the parameters above.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+// Initialize charts on page load
+document.addEventListener('DOMContentLoaded', function() {
+    initializeModelComparisonChart();
+    initializeFeatureImportanceChart();
+});
+
+function initializeModelComparisonChart() {
+    const ctx = document.getElementById('modelComparisonChart').getContext('2d');
+    
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['XGBoost', 'Random Forest', 'Ensemble', 'CNN', 'Hybrid'],
+            datasets: [{
+                label: 'Accuracy (%)',
+                data: [80.4, 78.0, 79.8, 82.1, 83.5],
+                backgroundColor: ['#28a745', '#17a2b8', '#ffc107', '#6f42c1', '#20c997'],
+                borderWidth: 1,
+                borderColor: '#ffffff'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 100,
+                    ticks: {
+                        color: '#ffffff'
+                    }
+                },
+                x: {
+                    ticks: {
+                        color: '#ffffff'
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        }
+    });
+}
+
+function initializeFeatureImportanceChart() {
+    const ctx = document.getElementById('featureImportanceChart').getContext('2d');
+    
+    new Chart(ctx, {
+        type: 'horizontalBar',
+        data: {
+            labels: ['Planet Radius', 'Stellar Temp', 'Orbital Period', 'Transit Depth', 'Stellar Radius', 'Transit SNR'],
+            datasets: [{
+                label: 'Importance',
+                data: [0.25, 0.20, 0.18, 0.15, 0.12, 0.10],
+                backgroundColor: '#ffc107',
+                borderWidth: 1,
+                borderColor: '#ffffff'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            indexAxis: 'y',
+            scales: {
+                x: {
+                    beginAtZero: true,
+                    max: 0.3,
+                    ticks: {
+                        color: '#ffffff'
+                    }
+                },
+                y: {
+                    ticks: {
+                        color: '#ffffff'
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        }
+    });
+}
+
+function testModel(modelName) {
+    const testData = {
+        orbital_period: parseFloat(document.getElementById('testOrbitalPeriod').value),
+        planet_radius: parseFloat(document.getElementById('testPlanetRadius').value),
+        stellar_temp: parseFloat(document.getElementById('testStellarTemp').value),
+        stellar_radius: parseFloat(document.getElementById('testStellarRadius').value),
+        stellar_mag: 12.0,
+        transit_depth: 0.01,
+        transit_duration: 0.1
+    };
+    
+    const resultsDiv = document.getElementById('testResults');
+    resultsDiv.innerHTML = '<div class="text-center"><div class="spinner-border text-primary" role="status"></div><p class="mt-2">Testing model...</p></div>';
+    
+    // Simulate API call based on model type
+    let endpoint = '/api/predict';
+    if (modelName === 'cnn' || modelName === 'hybrid') {
+        endpoint = '/api/comprehensive';
+    }
+    
+    fetch(endpoint, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(testData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        displayTestResults(modelName, data);
+    })
+    .catch(error => {
+        resultsDiv.innerHTML = `
+            <div class="alert alert-danger">
+                <h6>Error Testing ${modelName}</h6>
+                <p>${error.message}</p>
+            </div>
+        `;
+    });
+}
+
+function displayTestResults(modelName, data) {
+    const resultsDiv = document.getElementById('testResults');
+    
+    let resultHtml = `
+        <h6 class="text-primary">${modelName.toUpperCase()} Model Results</h6>
+        <div class="row">
+            <div class="col-6">
+                <strong>Prediction:</strong><br>
+                <span class="badge bg-success">${data.classification?.prediction || data.prediction?.prediction || 'N/A'}</span>
+            </div>
+            <div class="col-6">
+                <strong>Confidence:</strong><br>
+                <span class="text-info">${((data.classification?.confidence || data.prediction?.confidence || 0) * 100).toFixed(1)}%</span>
+            </div>
+        </div>
+    `;
+    
+    if (data.habitability) {
+        resultHtml += `
+            <hr>
+            <h6 class="text-warning">Habitability Analysis</h6>
+            <div class="row">
+                <div class="col-6">
+                    <strong>Score:</strong><br>
+                    <span class="text-warning">${data.habitability.habitability_score.toFixed(3)}</span>
+                </div>
+                <div class="col-6">
+                    <strong>Habitable:</strong><br>
+                    <span class="badge ${data.habitability.is_habitable ? 'bg-success' : 'bg-danger'}">${data.habitability.is_habitable ? 'Yes' : 'No'}</span>
+                </div>
+            </div>
+        `;
+    }
+    
+    if (data.anomaly_detection) {
+        resultHtml += `
+            <hr>
+            <h6 class="text-danger">Anomaly Detection</h6>
+            <div class="row">
+                <div class="col-6">
+                    <strong>Status:</strong><br>
+                    <span class="badge ${data.anomaly_detection.is_anomaly ? 'bg-danger' : 'bg-success'}">${data.anomaly_detection.is_anomaly ? 'Anomaly' : 'Normal'}</span>
+                </div>
+                <div class="col-6">
+                    <strong>Type:</strong><br>
+                    <span class="text-muted">${data.anomaly_detection.anomaly_type}</span>
+                </div>
+            </div>
+        `;
+    }
+    
+    if (data.processing_time_ms) {
+        resultHtml += `
+            <hr>
+            <small class="text-muted">
+                <strong>Processing Time:</strong> ${data.processing_time_ms}ms
+            </small>
+        `;
+    }
+    
+    resultsDiv.innerHTML = resultHtml;
+}
+</script>
+{% endblock %}

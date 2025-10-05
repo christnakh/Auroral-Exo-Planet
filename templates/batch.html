@@ -1,0 +1,777 @@
+{% extends "base.html" %}
+
+{% block title %}📊 Batch Analysis - AurOracle{% endblock %}
+
+{% block content %}
+<div class="batch-page">
+    <div class="batch-container">
+        <!-- Hero Section -->
+        <div class="batch-hero">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    <i class="fas fa-layer-group me-3"></i>
+                    Batch Exoplanet Analysis
+                </h1>
+                <p class="hero-subtitle">
+                    Analyze multiple exoplanet candidates simultaneously with our advanced ML models. 
+                    Upload your CSV data and get comprehensive classification results in minutes.
+                </p>
+                <div class="hero-features">
+                    <div class="feature-item">
+                        <i class="fas fa-rocket text-primary"></i>
+                        <span>Fast Processing</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-brain text-success"></i>
+                        <span>AI Explanations</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-chart-line text-warning"></i>
+                        <span>Detailed Analytics</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <div class="batch-content">
+        <!-- Upload Section -->
+        <div class="upload-section">
+            <div class="upload-card">
+                <div class="upload-header">
+                    <h3 class="upload-title">
+                        <i class="fas fa-upload me-2"></i>
+                        Upload Your Data
+                    </h3>
+                    <p class="upload-description">
+                        Upload a CSV file containing multiple exoplanet candidates for batch analysis
+                    </p>
+                </div>
+                <div class="upload-body">
+                    <form id="batchUploadForm" enctype="multipart/form-data" class="upload-form">
+                        <div class="file-upload-area" id="fileUploadArea">
+                            <div class="file-upload-content">
+                                <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                                <h4 class="upload-text">Drag & Drop your CSV file here</h4>
+                                <p class="upload-subtext">or click to browse files</p>
+                                <input type="file" id="csvFile" accept=".csv" required class="file-input">
+                                <button type="button" class="browse-btn" onclick="document.getElementById('csvFile').click()">
+                                    <i class="fas fa-folder-open me-2"></i>Browse Files
+                                </button>
+                            </div>
+                        </div>
+                        <div class="file-info" id="fileInfo" style="display: none;">
+                            <div class="file-details">
+                                <i class="fas fa-file-csv text-success"></i>
+                                <div class="file-text">
+                                    <div class="file-name" id="fileName"></div>
+                                    <div class="file-size" id="fileSize"></div>
+                                </div>
+                                <button type="button" class="remove-file" onclick="removeFile()">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="analysis-options">
+                            <h4 class="options-title">
+                                <i class="fas fa-cogs me-2"></i>Analysis Options
+                            </h4>
+                            
+                            <div class="option-group">
+                                <label for="analysisType" class="option-label">
+                                    <i class="fas fa-microscope me-1"></i>Analysis Type
+                                </label>
+                                <div class="analysis-type-grid">
+                                    <div class="analysis-option">
+                                        <input type="radio" id="basic" name="analysisType" value="basic" checked>
+                                        <label for="basic" class="option-card">
+                                            <div class="option-icon">
+                                                <i class="fas fa-check-circle"></i>
+                                            </div>
+                                            <div class="option-content">
+                                                <h5>Basic Classification</h5>
+                                                <p>Quick classification of candidates</p>
+                                            </div>
+                                        </label>
+                                    </div>
+                                    <div class="analysis-option">
+                                        <input type="radio" id="comprehensive" name="analysisType" value="comprehensive">
+                                        <label for="comprehensive" class="option-card">
+                                            <div class="option-icon">
+                                                <i class="fas fa-chart-line"></i>
+                                            </div>
+                                            <div class="option-content">
+                                                <h5>Comprehensive</h5>
+                                                <p>Full analysis with all features</p>
+                                            </div>
+                                        </label>
+                                    </div>
+                                    <div class="analysis-option">
+                                        <input type="radio" id="habitability" name="analysisType" value="habitability">
+                                        <label for="habitability" class="option-card">
+                                            <div class="option-icon">
+                                                <i class="fas fa-globe"></i>
+                                            </div>
+                                            <div class="option-content">
+                                                <h5>Habitability Focus</h5>
+                                                <p>Focus on habitable zone analysis</p>
+                                            </div>
+                                        </label>
+                                    </div>
+                                    <div class="analysis-option">
+                                        <input type="radio" id="anomaly" name="analysisType" value="anomaly">
+                                        <label for="anomaly" class="option-card">
+                                            <div class="option-icon">
+                                                <i class="fas fa-exclamation-triangle"></i>
+                                            </div>
+                                            <div class="option-content">
+                                                <h5>Anomaly Detection</h5>
+                                                <p>Detect unusual patterns</p>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="checkbox-group">
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="includeExplanations">
+                                    <label for="includeExplanations" class="checkbox-label">
+                                        <i class="fas fa-brain me-2"></i>Include AI Explanations
+                                        <span class="checkbox-description">Get detailed explanations for each prediction</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="action-buttons">
+                            <button type="submit" class="btn primary-btn btn-lg">
+                                <i class="fas fa-rocket me-2"></i>Start Batch Analysis
+                            </button>
+                            <button type="button" class="btn secondary-btn" onclick="downloadSampleCSV()">
+                                <i class="fas fa-download me-2"></i>Download Sample CSV
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Progress Section -->
+            <div id="progressSection" class="card bg-dark border-info mt-3" style="display: none;">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-tasks me-2"></i>
+                        Analysis Progress
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between">
+                            <span>Progress</span>
+                            <span id="progressText">0/0</span>
+                        </div>
+                        <div class="progress" style="height: 20px;">
+                            <div class="progress-bar bg-info" id="progressBar" 
+                                 role="progressbar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between">
+                            <span>Processing Time</span>
+                            <span id="processingTime">0s</span>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between">
+                            <span>Estimated Time Remaining</span>
+                            <span id="estimatedTime">-</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div class="col-lg-8">
+            <!-- Loading State -->
+            <div id="loadingState" class="text-center py-5" style="display: none;">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <h5 class="mt-3">Processing Batch Analysis...</h5>
+                <p class="text-muted">Analyzing multiple exoplanet candidates</p>
+            </div>
+
+            <!-- Results Summary -->
+            <div id="resultsSummary" class="card bg-dark border-warning mb-4" style="display: none;">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0">
+                        <i class="fas fa-chart-bar me-2"></i>
+                        Analysis Summary
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="text-center">
+                                <h3 class="text-primary" id="totalCandidates">-</h3>
+                                <p class="mb-0">Total Candidates</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="text-center">
+                                <h3 class="text-success" id="confirmedPlanets">-</h3>
+                                <p class="mb-0">Confirmed</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="text-center">
+                                <h3 class="text-warning" id="candidates">-</h3>
+                                <p class="mb-0">Candidates</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="text-center">
+                                <h3 class="text-danger" id="falsePositives">-</h3>
+                                <p class="mb-0">False Positives</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detailed Results Table -->
+            <div id="resultsTable" class="card bg-dark border-secondary" style="display: none;">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-table me-2"></i>
+                        Detailed Results
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-dark table-striped">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Prediction</th>
+                                    <th>Confidence</th>
+                                    <th>Habitability</th>
+                                    <th>Anomaly</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="resultsTableBody">
+                                <!-- Results will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Export Options -->
+            <div id="exportSection" class="card bg-dark border-info mt-4" style="display: none;">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-download me-2"></i>
+                        Export Results
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <button class="btn btn-outline-success w-100" onclick="exportResults('csv')">
+                                <i class="fas fa-file-csv me-2"></i>Export CSV
+                            </button>
+                        </div>
+                        <div class="col-md-4">
+                            <button class="btn btn-outline-warning w-100" onclick="exportResults('json')">
+                                <i class="fas fa-file-code me-2"></i>Export JSON
+                            </button>
+                        </div>
+                        <div class="col-md-4">
+                            <button class="btn btn-outline-info w-100" onclick="exportResults('excel')">
+                                <i class="fas fa-file-excel me-2"></i>Export Excel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Error State -->
+            <div id="errorState" class="alert alert-danger" style="display: none;">
+                <h5><i class="fas fa-exclamation-circle me-2"></i>Batch Analysis Error</h5>
+                <p id="errorMessage">An error occurred during batch analysis.</p>
+                <button class="btn btn-outline-danger" onclick="retryBatchAnalysis()">
+                    <i class="fas fa-redo me-2"></i>Retry Analysis
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Results Modal -->
+<div class="modal fade" id="resultModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content bg-dark">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-search me-2"></i>
+                    Detailed Analysis Results
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Detailed results will be shown here -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+let batchResults = null;
+let startTime = null;
+
+document.getElementById('batchUploadForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    startBatchAnalysis();
+});
+
+function startBatchAnalysis() {
+    const fileInput = document.getElementById('csvFile');
+    const file = fileInput.files[0];
+    
+    if (!file) {
+        alert('Please select a CSV file');
+        return;
+    }
+
+    // Show loading state
+    document.getElementById('loadingState').style.display = 'block';
+    document.getElementById('resultsSummary').style.display = 'none';
+    document.getElementById('resultsTable').style.display = 'none';
+    document.getElementById('exportSection').style.display = 'none';
+    document.getElementById('errorState').style.display = 'none';
+    document.getElementById('progressSection').style.display = 'block';
+
+    // Parse CSV file
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const csv = e.target.result;
+        const candidates = parseCSV(csv);
+        
+        if (candidates.length === 0) {
+            showError('No valid candidates found in CSV file');
+            return;
+        }
+
+        // Start batch analysis
+        processBatchAnalysis(candidates);
+    };
+    reader.readAsText(file);
+}
+
+function parseCSV(csv) {
+    const lines = csv.split('\n');
+    const headers = lines[0].split(',').map(h => h.trim());
+    const candidates = [];
+    
+    for (let i = 1; i < lines.length; i++) {
+        if (lines[i].trim()) {
+            const values = lines[i].split(',').map(v => v.trim());
+            const candidate = {};
+            
+            headers.forEach((header, index) => {
+                candidate[header] = parseFloat(values[index]) || 0;
+            });
+            
+            candidates.push(candidate);
+        }
+    }
+    
+    return candidates;
+}
+
+function processBatchAnalysis(candidates) {
+    startTime = Date.now();
+    const analysisType = document.getElementById('analysisType').value;
+    const includeExplanations = document.getElementById('includeExplanations').checked;
+    
+    // Update progress
+    updateProgress(0, candidates.length);
+    
+    // Process candidates in batches
+    const batchSize = 5;
+    let currentIndex = 0;
+    const results = [];
+    
+    function processBatch() {
+        const batch = candidates.slice(currentIndex, currentIndex + batchSize);
+        const promises = batch.map((candidate, index) => {
+            return analyzeCandidate(candidate, currentIndex + index);
+        });
+        
+        Promise.all(promises).then(batchResults => {
+            results.push(...batchResults);
+            currentIndex += batchSize;
+            
+            updateProgress(currentIndex, candidates.length);
+            
+            if (currentIndex < candidates.length) {
+                setTimeout(processBatch, 100); // Small delay to prevent overwhelming the server
+            } else {
+                // All candidates processed
+                batchResults = results;
+                displayBatchResults(results);
+            }
+        }).catch(error => {
+            showError('Error processing batch: ' + error.message);
+        });
+    }
+    
+    processBatch();
+}
+
+function analyzeCandidate(candidate, index) {
+    const analysisType = document.getElementById('analysisType').value;
+    const includeExplanations = document.getElementById('includeExplanations').checked;
+    
+    let endpoint = '/api/analyze';
+    if (analysisType === 'comprehensive') {
+        endpoint = '/api/comprehensive';
+    } else if (analysisType === 'habitability') {
+        endpoint = '/api/habitability';
+    } else if (analysisType === 'anomaly') {
+        endpoint = '/api/anomaly-detection';
+    }
+    
+    const requestData = {
+        ...candidate,
+        include_explanations: includeExplanations
+    };
+    
+    return fetch(endpoint, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestData)
+    })
+    .then(response => response.json())
+    .then(data => ({
+        index: index,
+        candidate: candidate,
+        result: data
+    }))
+    .catch(error => ({
+        index: index,
+        candidate: candidate,
+        error: error.message
+    }));
+}
+
+function updateProgress(current, total) {
+    const percentage = (current / total) * 100;
+    document.getElementById('progressBar').style.width = percentage + '%';
+    document.getElementById('progressText').textContent = `${current}/${total}`;
+    
+    if (startTime) {
+        const elapsed = (Date.now() - startTime) / 1000;
+        document.getElementById('processingTime').textContent = elapsed.toFixed(1) + 's';
+        
+        if (current > 0) {
+            const estimated = (elapsed / current) * (total - current);
+            document.getElementById('estimatedTime').textContent = estimated.toFixed(1) + 's';
+        }
+    }
+}
+
+function displayBatchResults(results) {
+    document.getElementById('loadingState').style.display = 'none';
+    document.getElementById('progressSection').style.display = 'none';
+    document.getElementById('resultsSummary').style.display = 'block';
+    document.getElementById('resultsTable').style.display = 'block';
+    document.getElementById('exportSection').style.display = 'block';
+    
+    // Calculate summary statistics
+    const total = results.length;
+    const confirmed = results.filter(r => r.result && r.result.classification && r.result.classification.prediction === 'confirmed').length;
+    const candidates = results.filter(r => r.result && r.result.classification && r.result.classification.prediction === 'candidate').length;
+    const falsePositives = results.filter(r => r.result && r.result.classification && r.result.classification.prediction === 'false_positive').length;
+    
+    document.getElementById('totalCandidates').textContent = total;
+    document.getElementById('confirmedPlanets').textContent = confirmed;
+    document.getElementById('candidates').textContent = candidates;
+    document.getElementById('falsePositives').textContent = falsePositives;
+    
+    // Populate results table
+    const tableBody = document.getElementById('resultsTableBody');
+    tableBody.innerHTML = '';
+    
+    results.forEach((result, index) => {
+        const row = document.createElement('tr');
+        
+        if (result.error) {
+            row.innerHTML = `
+                <td>${result.index + 1}</td>
+                <td colspan="5" class="text-danger">
+                    <i class="fas fa-exclamation-triangle me-2"></i>Error: ${result.error}
+                </td>
+            `;
+        } else {
+            const classification = result.result.classification;
+            const habitability = result.result.habitability;
+            const anomaly = result.result.anomaly_detection;
+            
+            const predictionClass = classification.prediction === 'confirmed' ? 'success' : 
+                                   classification.prediction === 'candidate' ? 'warning' : 'danger';
+            
+            const habitabilityScore = habitability ? habitability.habitability_score.toFixed(3) : 'N/A';
+            const anomalyStatus = anomaly ? (anomaly.is_anomaly ? 'Anomaly' : 'Normal') : 'N/A';
+            
+            row.innerHTML = `
+                <td>${result.index + 1}</td>
+                <td><span class="badge bg-${predictionClass}">${classification.prediction}</span></td>
+                <td>${(classification.confidence * 100).toFixed(1)}%</td>
+                <td>${habitabilityScore}</td>
+                <td>${anomalyStatus}</td>
+                <td>
+                    <button class="btn btn-sm btn-outline-primary" onclick="showDetailedResults(${index})">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </td>
+            `;
+        }
+        
+        tableBody.appendChild(row);
+    });
+}
+
+function showDetailedResults(index) {
+    const result = batchResults[index];
+    const modalBody = document.getElementById('modalBody');
+    
+    if (result.error) {
+        modalBody.innerHTML = `
+            <div class="alert alert-danger">
+                <h6>Error</h6>
+                <p>${result.error}</p>
+            </div>
+        `;
+    } else {
+        const classification = result.result.classification;
+        const habitability = result.result.habitability;
+        const anomaly = result.result.anomaly_detection;
+        
+        modalBody.innerHTML = `
+            <div class="row">
+                <div class="col-md-6">
+                    <h6 class="text-primary">Classification</h6>
+                    <p><strong>Prediction:</strong> ${classification.prediction}</p>
+                    <p><strong>Confidence:</strong> ${(classification.confidence * 100).toFixed(1)}%</p>
+                    <h6 class="text-primary mt-3">Probabilities</h6>
+                    <ul class="list-unstyled">
+                        <li>Confirmed: ${(classification.probabilities.confirmed * 100).toFixed(1)}%</li>
+                        <li>Candidate: ${(classification.probabilities.candidate * 100).toFixed(1)}%</li>
+                        <li>False Positive: ${(classification.probabilities.false_positive * 100).toFixed(1)}%</li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <h6 class="text-warning">Habitability</h6>
+                    <p><strong>Score:</strong> ${habitability.habitability_score.toFixed(3)}</p>
+                    <p><strong>Habitable:</strong> ${habitability.is_habitable ? 'Yes' : 'No'}</p>
+                    <p><strong>Equilibrium Temp:</strong> ${habitability.equilibrium_temp.toFixed(1)} K</p>
+                    
+                    <h6 class="text-danger mt-3">Anomaly Detection</h6>
+                    <p><strong>Status:</strong> ${anomaly.is_anomaly ? 'Anomaly Detected' : 'Normal'}</p>
+                    <p><strong>Type:</strong> ${anomaly.anomaly_type}</p>
+                    <p><strong>Confidence:</strong> ${anomaly.confidence.toFixed(1)}%</p>
+                </div>
+            </div>
+        `;
+    }
+    
+    new bootstrap.Modal(document.getElementById('resultModal')).show();
+}
+
+function exportResults(format) {
+    if (!batchResults) {
+        alert('No results to export');
+        return;
+    }
+    
+    let data, filename, mimeType;
+    
+    if (format === 'csv') {
+        data = convertToCSV(batchResults);
+        filename = 'batch_analysis_results.csv';
+        mimeType = 'text/csv';
+    } else if (format === 'json') {
+        data = JSON.stringify(batchResults, null, 2);
+        filename = 'batch_analysis_results.json';
+        mimeType = 'application/json';
+    } else if (format === 'excel') {
+        // For Excel export, we'll create a CSV that can be opened in Excel
+        data = convertToCSV(batchResults);
+        filename = 'batch_analysis_results.csv';
+        mimeType = 'text/csv';
+    }
+    
+    const blob = new Blob([data], { type: mimeType });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.click();
+    window.URL.revokeObjectURL(url);
+}
+
+function convertToCSV(results) {
+    const headers = ['ID', 'Prediction', 'Confidence', 'Habitability Score', 'Anomaly Status', 'Orbital Period', 'Planet Radius', 'Stellar Temp'];
+    const rows = [headers.join(',')];
+    
+    results.forEach((result, index) => {
+        if (!result.error) {
+            const classification = result.result.classification;
+            const habitability = result.result.habitability;
+            const anomaly = result.result.anomaly_detection;
+            
+            const row = [
+                index + 1,
+                classification.prediction,
+                (classification.confidence * 100).toFixed(1),
+                habitability ? habitability.habitability_score.toFixed(3) : 'N/A',
+                anomaly ? (anomaly.is_anomaly ? 'Anomaly' : 'Normal') : 'N/A',
+                result.candidate.orbital_period || result.candidate.period || 'N/A',
+                result.candidate.planet_radius || 'N/A',
+                result.candidate.stellar_temp || 'N/A'
+            ];
+            rows.push(row.join(','));
+        }
+    });
+    
+    return rows.join('\n');
+}
+
+function downloadSampleCSV() {
+    const sampleData = `orbital_period,planet_radius,stellar_temp,stellar_radius,stellar_mag,transit_depth,transit_duration
+365.25,1.0,5800,1.0,12.0,0.01,0.1
+200.0,1.5,5500,0.8,10.0,0.02,0.15
+500.0,0.8,6000,1.2,14.0,0.005,0.08
+100.0,2.0,5000,0.9,11.0,0.03,0.2`;
+    
+    const blob = new Blob([sampleData], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'sample_exoplanet_data.csv';
+    a.click();
+    window.URL.revokeObjectURL(url);
+}
+
+function showError(message) {
+    document.getElementById('loadingState').style.display = 'none';
+    document.getElementById('progressSection').style.display = 'none';
+    document.getElementById('errorState').style.display = 'block';
+    document.getElementById('errorMessage').textContent = message;
+}
+
+function retryBatchAnalysis() {
+    document.getElementById('errorState').style.display = 'none';
+    startBatchAnalysis();
+}
+
+// Enhanced file upload functionality
+function initializeFileUpload() {
+    const fileUploadArea = document.getElementById('fileUploadArea');
+    const fileInput = document.getElementById('csvFile');
+    const fileInfo = document.getElementById('fileInfo');
+    const fileName = document.getElementById('fileName');
+    const fileSize = document.getElementById('fileSize');
+
+    // Drag and drop functionality
+    fileUploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        fileUploadArea.classList.add('dragover');
+    });
+
+    fileUploadArea.addEventListener('dragleave', (e) => {
+        e.preventDefault();
+        fileUploadArea.classList.remove('dragover');
+    });
+
+    fileUploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        fileUploadArea.classList.remove('dragover');
+        
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+            handleFileSelect(files[0]);
+        }
+    });
+
+    // Click to upload
+    fileUploadArea.addEventListener('click', () => {
+        fileInput.click();
+    });
+
+    // File input change
+    fileInput.addEventListener('change', (e) => {
+        if (e.target.files.length > 0) {
+            handleFileSelect(e.target.files[0]);
+        }
+    });
+}
+
+function handleFileSelect(file) {
+    if (!file.name.toLowerCase().endsWith('.csv')) {
+        alert('Please select a CSV file');
+        return;
+    }
+
+    const fileName = document.getElementById('fileName');
+    const fileSize = document.getElementById('fileSize');
+    const fileInfo = document.getElementById('fileInfo');
+    const fileUploadArea = document.getElementById('fileUploadArea');
+
+    // Update file info
+    fileName.textContent = file.name;
+    fileSize.textContent = formatFileSize(file.size);
+
+    // Show file info, hide upload area
+    fileInfo.style.display = 'block';
+    fileUploadArea.style.display = 'none';
+}
+
+function removeFile() {
+    const fileInput = document.getElementById('csvFile');
+    const fileInfo = document.getElementById('fileInfo');
+    const fileUploadArea = document.getElementById('fileUploadArea');
+
+    // Reset file input
+    fileInput.value = '';
+
+    // Hide file info, show upload area
+    fileInfo.style.display = 'none';
+    fileUploadArea.style.display = 'block';
+}
+
+function formatFileSize(bytes) {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+}
+
+// Initialize when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    initializeFileUpload();
+});
+</script>
+{% endblock %}

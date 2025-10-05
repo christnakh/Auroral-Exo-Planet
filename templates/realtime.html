@@ -1,0 +1,678 @@
+{% extends "base.html" %}
+
+{% block title %}🛰️ Real-time Data Processing - ExoplanetML{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-5 mt-5">
+    <!-- Real-time Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card bg-dark border-primary">
+                <div class="card-header bg-primary text-white">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h4 class="mb-0">
+                                <i class="fas fa-satellite-dish me-2"></i>
+                                Real-time Space Data Processing
+                            </h4>
+                            <p class="mb-0 mt-2">Live analysis of space missions and exoplanet discoveries</p>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-outline-light" id="startStopBtn" onclick="toggleRealTime()">
+                                    <i class="fas fa-play me-1"></i>Start Live Feed
+                                </button>
+                                <button class="btn btn-outline-light" onclick="refreshData()">
+                                    <i class="fas fa-sync-alt me-1"></i>Refresh
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- System Status -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card bg-dark border-success text-center">
+                <div class="card-body">
+                    <i class="fas fa-satellite fa-2x text-success mb-3"></i>
+                    <h3 class="text-success" id="activeMissions">3</h3>
+                    <p class="mb-0">Active Missions</p>
+                    <small class="text-muted">Kepler, TESS, K2</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-dark border-info text-center">
+                <div class="card-body">
+                    <i class="fas fa-clock fa-2x text-info mb-3"></i>
+                    <h3 class="text-info" id="lastUpdate">-</h3>
+                    <p class="mb-0">Last Update</p>
+                    <small class="text-muted">Real-time</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-dark border-warning text-center">
+                <div class="card-body">
+                    <i class="fas fa-chart-line fa-2x text-warning mb-3"></i>
+                    <h3 class="text-warning" id="processedToday">-</h3>
+                    <p class="mb-0">Processed Today</p>
+                    <small class="text-muted">Candidates</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-dark border-danger text-center">
+                <div class="card-body">
+                    <i class="fas fa-exclamation-triangle fa-2x text-danger mb-3"></i>
+                    <h3 class="text-danger" id="anomaliesDetected">-</h3>
+                    <p class="mb-0">Anomalies</p>
+                    <small class="text-muted">Last 24h</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Live Data Streams -->
+    <div class="row mb-4">
+        <div class="col-lg-8">
+            <div class="card bg-dark border-secondary">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-stream me-2"></i>
+                        Live Data Streams
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="card bg-dark border-info mb-3">
+                                <div class="card-header bg-info text-white">
+                                    <h6 class="mb-0">
+                                        <i class="fas fa-search me-2"></i>
+                                        Kepler Mission
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-2">
+                                        <strong>Status:</strong> 
+                                        <span class="badge bg-success" id="keplerStatus">Active</span>
+                                    </div>
+                                    <div class="mb-2">
+                                        <strong>Latest:</strong> 
+                                        <span id="keplerLatest">-</span>
+                                    </div>
+                                    <div class="mb-2">
+                                        <strong>Discovered:</strong> 
+                                        <span id="keplerDiscovered">2,662</span>
+                                    </div>
+                                    <div class="progress" style="height: 8px;">
+                                        <div class="progress-bar bg-info" style="width: 85%"></div>
+                                    </div>
+                                    <small class="text-muted">Mission Progress: 85%</small>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <div class="card bg-dark border-warning mb-3">
+                                <div class="card-header bg-warning text-dark">
+                                    <h6 class="mb-0">
+                                        <i class="fas fa-satellite me-2"></i>
+                                        TESS Mission
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-2">
+                                        <strong>Status:</strong> 
+                                        <span class="badge bg-success" id="tessStatus">Active</span>
+                                    </div>
+                                    <div class="mb-2">
+                                        <strong>Latest:</strong> 
+                                        <span id="tessLatest">-</span>
+                                    </div>
+                                    <div class="mb-2">
+                                        <strong>Discovered:</strong> 
+                                        <span id="tessDiscovered">400+</span>
+                                    </div>
+                                    <div class="progress" style="height: 8px;">
+                                        <div class="progress-bar bg-warning" style="width: 60%"></div>
+                                    </div>
+                                    <small class="text-muted">Mission Progress: 60%</small>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <div class="card bg-dark border-danger mb-3">
+                                <div class="card-header bg-danger text-white">
+                                    <h6 class="mb-0">
+                                        <i class="fas fa-globe me-2"></i>
+                                        K2 Mission
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-2">
+                                        <strong>Status:</strong> 
+                                        <span class="badge bg-secondary" id="k2Status">Completed</span>
+                                    </div>
+                                    <div class="mb-2">
+                                        <strong>Latest:</strong> 
+                                        <span id="k2Latest">-</span>
+                                    </div>
+                                    <div class="mb-2">
+                                        <strong>Discovered:</strong> 
+                                        <span id="k2Discovered">500+</span>
+                                    </div>
+                                    <div class="progress" style="height: 8px;">
+                                        <div class="progress-bar bg-danger" style="width: 100%"></div>
+                                    </div>
+                                    <small class="text-muted">Mission Progress: 100%</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card bg-dark border-primary">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-chart-pie me-2"></i>
+                        Discovery Distribution
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="discoveryChart" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Discoveries -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card bg-dark border-success">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-star me-2"></i>
+                        Recent Discoveries
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-dark table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Timestamp</th>
+                                    <th>Mission</th>
+                                    <th>Planet Name</th>
+                                    <th>Classification</th>
+                                    <th>Habitability</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recentDiscoveriesTable">
+                                <!-- Recent discoveries will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Live Analysis Pipeline -->
+    <div class="row mb-4">
+        <div class="col-lg-6">
+            <div class="card bg-dark border-info">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-cogs me-2"></i>
+                        Analysis Pipeline
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="pipeline-step mb-3">
+                        <div class="d-flex align-items-center">
+                            <div class="pipeline-icon bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                                <i class="fas fa-download"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-0">Data Ingestion</h6>
+                                <small class="text-muted">Collecting from NASA APIs</small>
+                            </div>
+                            <div class="ms-auto">
+                                <span class="badge bg-success" id="ingestionStatus">Active</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="pipeline-step mb-3">
+                        <div class="d-flex align-items-center">
+                            <div class="pipeline-icon bg-warning text-dark rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                                <i class="fas fa-filter"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-0">Data Processing</h6>
+                                <small class="text-muted">Cleaning and feature extraction</small>
+                            </div>
+                            <div class="ms-auto">
+                                <span class="badge bg-success" id="processingStatus">Active</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="pipeline-step mb-3">
+                        <div class="d-flex align-items-center">
+                            <div class="pipeline-icon bg-info text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                                <i class="fas fa-brain"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-0">ML Analysis</h6>
+                                <small class="text-muted">Running classification models</small>
+                            </div>
+                            <div class="ms-auto">
+                                <span class="badge bg-success" id="mlStatus">Active</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="pipeline-step mb-3">
+                        <div class="d-flex align-items-center">
+                            <div class="pipeline-icon bg-success text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-0">Results Output</h6>
+                                <small class="text-muted">Publishing analysis results</small>
+                            </div>
+                            <div class="ms-auto">
+                                <span class="badge bg-success" id="outputStatus">Active</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-6">
+            <div class="card bg-dark border-warning">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0">
+                        <i class="fas fa-chart-line me-2"></i>
+                        Processing Statistics
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="processingStatsChart" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NASA Data Integration -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card bg-dark border-primary">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-satellite me-2"></i>
+                        NASA Data Integration
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="text-center">
+                                <h6 class="text-primary">Latest Discoveries</h6>
+                                <button class="btn btn-outline-primary btn-sm" onclick="loadNASAData('latest')">
+                                    <i class="fas fa-download me-1"></i>Load Latest
+                                </button>
+                                <div id="nasaLatestData" class="mt-2 text-muted small">Click to load</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="text-center">
+                                <h6 class="text-primary">Habitable Planets</h6>
+                                <button class="btn btn-outline-success btn-sm" onclick="loadNASAData('habitable')">
+                                    <i class="fas fa-leaf me-1"></i>Load Habitable
+                                </button>
+                                <div id="nasaHabitableData" class="mt-2 text-muted small">Click to load</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="text-center">
+                                <h6 class="text-primary">Statistics</h6>
+                                <button class="btn btn-outline-info btn-sm" onclick="loadNASAData('statistics')">
+                                    <i class="fas fa-chart-bar me-1"></i>Load Stats
+                                </button>
+                                <div id="nasaStatsData" class="mt-2 text-muted small">Click to load</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alert System -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card bg-dark border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-bell me-2"></i>
+                        Alert System
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="text-primary">Alert Types</h6>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="alertConfirmed" checked>
+                                <label class="form-check-label" for="alertConfirmed">
+                                    New Confirmed Planets
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="alertHabitable" checked>
+                                <label class="form-check-label" for="alertHabitable">
+                                    Potentially Habitable Worlds
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="alertAnomalies">
+                                <label class="form-check-label" for="alertAnomalies">
+                                    System Anomalies
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-primary">Recent Alerts</h6>
+                            <div id="alertList" class="bg-dark text-light p-3 rounded" style="max-height: 200px; overflow-y: auto;">
+                                <div class="alert alert-info alert-sm">
+                                    <i class="fas fa-info-circle me-2"></i>
+                                    System initialized and ready for real-time processing
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+let realTimeInterval = null;
+let isRealTimeActive = false;
+
+// Initialize real-time dashboard
+document.addEventListener('DOMContentLoaded', function() {
+    initializeDiscoveryChart();
+    initializeProcessingStatsChart();
+    loadRecentDiscoveries();
+    updateSystemStatus();
+});
+
+function toggleRealTime() {
+    const btn = document.getElementById('startStopBtn');
+    
+    if (isRealTimeActive) {
+        // Stop real-time processing
+        clearInterval(realTimeInterval);
+        btn.innerHTML = '<i class="fas fa-play me-1"></i>Start Live Feed';
+        btn.className = 'btn btn-outline-light';
+        isRealTimeActive = false;
+        addAlert('Real-time processing stopped', 'warning');
+    } else {
+        // Start real-time processing
+        realTimeInterval = setInterval(updateRealTimeData, 5000); // Update every 5 seconds
+        btn.innerHTML = '<i class="fas fa-pause me-1"></i>Stop Live Feed';
+        btn.className = 'btn btn-outline-danger';
+        isRealTimeActive = true;
+        addAlert('Real-time processing started', 'success');
+    }
+}
+
+function updateRealTimeData() {
+    updateSystemStatus();
+    loadRecentDiscoveries();
+    updatePipelineStatus();
+    updateMissionData();
+}
+
+function updateSystemStatus() {
+    const now = new Date();
+    document.getElementById('lastUpdate').textContent = now.toLocaleTimeString();
+    document.getElementById('processedToday').textContent = Math.floor(Math.random() * 50) + 100;
+    document.getElementById('anomaliesDetected').textContent = Math.floor(Math.random() * 5);
+}
+
+function updateMissionData() {
+    // Simulate mission data updates
+    const missions = ['kepler', 'tess', 'k2'];
+    missions.forEach(mission => {
+        const latestElement = document.getElementById(mission + 'Latest');
+        if (latestElement) {
+            const candidates = ['TOI-1234b', 'Kepler-456c', 'K2-789d'];
+            latestElement.textContent = candidates[Math.floor(Math.random() * candidates.length)];
+        }
+    });
+}
+
+function updatePipelineStatus() {
+    const statuses = ['Active', 'Processing', 'Idle'];
+    const statusElements = ['ingestionStatus', 'processingStatus', 'mlStatus', 'outputStatus'];
+    
+    statusElements.forEach(elementId => {
+        const element = document.getElementById(elementId);
+        if (element) {
+            const randomStatus = statuses[Math.floor(Math.random() * statuses.length)];
+            const statusClass = randomStatus === 'Active' ? 'bg-success' : 
+                              randomStatus === 'Processing' ? 'bg-warning' : 'bg-secondary';
+            element.textContent = randomStatus;
+            element.className = `badge ${statusClass}`;
+        }
+    });
+}
+
+function loadRecentDiscoveries() {
+    const tableBody = document.getElementById('recentDiscoveriesTable');
+    tableBody.innerHTML = '';
+    
+    // Simulate recent discoveries
+    const discoveries = [
+        {
+            timestamp: new Date().toLocaleString(),
+            mission: 'TESS',
+            name: 'TOI-1234b',
+            classification: 'confirmed',
+            habitability: 0.72,
+            status: 'analyzed'
+        },
+        {
+            timestamp: new Date(Date.now() - 300000).toLocaleString(),
+            mission: 'Kepler',
+            name: 'Kepler-456c',
+            classification: 'candidate',
+            habitability: 0.45,
+            status: 'processing'
+        },
+        {
+            timestamp: new Date(Date.now() - 600000).toLocaleString(),
+            mission: 'K2',
+            name: 'K2-789d',
+            classification: 'false_positive',
+            habitability: 0.23,
+            status: 'analyzed'
+        }
+    ];
+    
+    discoveries.forEach(discovery => {
+        const row = document.createElement('tr');
+        const classificationClass = discovery.classification === 'confirmed' ? 'success' : 
+                                   discovery.classification === 'candidate' ? 'warning' : 'danger';
+        const statusClass = discovery.status === 'analyzed' ? 'success' : 'warning';
+        
+        row.innerHTML = `
+            <td>${discovery.timestamp}</td>
+            <td><span class="badge bg-info">${discovery.mission}</span></td>
+            <td>${discovery.name}</td>
+            <td><span class="badge bg-${classificationClass}">${discovery.classification}</span></td>
+            <td>${discovery.habitability.toFixed(3)}</td>
+            <td><span class="badge bg-${statusClass}">${discovery.status}</span></td>
+        `;
+        tableBody.appendChild(row);
+    });
+}
+
+function initializeDiscoveryChart() {
+    const ctx = document.getElementById('discoveryChart').getContext('2d');
+    
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Kepler', 'TESS', 'K2', 'Other'],
+            datasets: [{
+                data: [2662, 400, 500, 200],
+                backgroundColor: ['#17a2b8', '#ffc107', '#dc3545', '#6c757d'],
+                borderWidth: 2,
+                borderColor: '#343a40'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        color: '#ffffff'
+                    }
+                }
+            }
+        }
+    });
+}
+
+function initializeProcessingStatsChart() {
+    const ctx = document.getElementById('processingStatsChart').getContext('2d');
+    
+    const labels = [];
+    const data = [];
+    
+    // Generate last 24 hours data
+    for (let i = 23; i >= 0; i--) {
+        const hour = new Date();
+        hour.setHours(hour.getHours() - i);
+        labels.push(hour.getHours() + ':00');
+        data.push(Math.floor(Math.random() * 20) + 5);
+    }
+    
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Candidates Processed',
+                data: data,
+                borderColor: '#ffc107',
+                backgroundColor: 'rgba(255, 193, 7, 0.1)',
+                tension: 0.4,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        color: '#ffffff'
+                    }
+                },
+                x: {
+                    ticks: {
+                        color: '#ffffff'
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    labels: {
+                        color: '#ffffff'
+                    }
+                }
+            }
+        }
+    });
+}
+
+function loadNASAData(type) {
+    let endpoint = '';
+    let targetElement = '';
+    
+    switch(type) {
+        case 'latest':
+            endpoint = '/api/nasa/latest';
+            targetElement = 'nasaLatestData';
+            break;
+        case 'habitable':
+            endpoint = '/api/nasa/habitable';
+            targetElement = 'nasaHabitableData';
+            break;
+        case 'statistics':
+            endpoint = '/api/nasa/statistics';
+            targetElement = 'nasaStatsData';
+            break;
+    }
+    
+    const element = document.getElementById(targetElement);
+    element.innerHTML = '<div class="spinner-border spinner-border-sm text-primary"></div> Loading...';
+    
+    fetch(endpoint)
+        .then(response => response.json())
+        .then(data => {
+            element.innerHTML = `<div class="text-success">✓ Loaded ${Object.keys(data).length} items</div>`;
+            addAlert(`NASA ${type} data loaded successfully`, 'success');
+        })
+        .catch(error => {
+            element.innerHTML = `<div class="text-danger">✗ Error: ${error.message}</div>`;
+            addAlert(`Failed to load NASA ${type} data`, 'danger');
+        });
+}
+
+function addAlert(message, type) {
+    const alertList = document.getElementById('alertList');
+    const alertDiv = document.createElement('div');
+    alertDiv.className = `alert alert-${type} alert-sm`;
+    alertDiv.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : type === 'warning' ? 'exclamation-triangle' : 'info-circle'} me-2"></i>${message}`;
+    
+    alertList.insertBefore(alertDiv, alertList.firstChild);
+    
+    // Keep only last 5 alerts
+    while (alertList.children.length > 5) {
+        alertList.removeChild(alertList.lastChild);
+    }
+}
+
+function refreshData() {
+    updateSystemStatus();
+    loadRecentDiscoveries();
+    updateMissionData();
+    addAlert('Data refreshed successfully', 'info');
+}
+</script>
+{% endblock %}
