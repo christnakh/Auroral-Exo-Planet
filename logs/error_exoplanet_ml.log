@@ -1,0 +1,9 @@
+2025-09-29 18:33:12,367 - src.explainability - ERROR - error:86 - Error getting top features: only integer scalar arrays can be converted to a scalar index
+2025-09-29 18:33:12,367 - src.explainability - ERROR - error:86 - Error generating SHAP explanation: SHAP explainer for random_forest not available
+2025-09-29 18:33:12,457 - src.explainability - ERROR - error:86 - Error generating LIME explanation: 'Explanation' object has no attribute 'predicted_class'
+2025-09-29 18:33:12,691 - src.explainability - ERROR - error:86 - Error getting top features: only integer scalar arrays can be converted to a scalar index
+2025-09-29 18:33:12,692 - src.explainability - ERROR - error:86 - Error generating SHAP explanation: SHAP explainer for random_forest not available
+2025-09-29 18:33:12,756 - src.explainability - ERROR - error:86 - Error generating LIME explanation: 'Explanation' object has no attribute 'predicted_class'
+2025-09-29 18:33:12,832 - src.explainability - ERROR - error:86 - Error getting top features: only integer scalar arrays can be converted to a scalar index
+2025-09-29 18:33:12,833 - src.explainability - ERROR - error:86 - Error generating SHAP explanation: SHAP explainer for random_forest not available
+2025-09-29 18:33:12,891 - src.explainability - ERROR - error:86 - Error generating LIME explanation: 'Explanation' object has no attribute 'predicted_class'

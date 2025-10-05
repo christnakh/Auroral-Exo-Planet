@@ -1,0 +1,99 @@
+{
+  "timestamp": "2025-10-05T15:27:00.233304",
+  "total_runtime": 389.2754590511322,
+  "models_trained": [
+    "xgboost",
+    "random_forest",
+    "scaler",
+    "label_encoder",
+    "cnn",
+    "hybrid"
+  ],
+  "data_info": {
+    "total_samples": 20103,
+    "features": [
+      "mission",
+      "label",
+      "period",
+      "duration",
+      "depth",
+      "planet_radius",
+      "stellar_radius",
+      "stellar_temp",
+      "stellar_mag",
+      "impact_param",
+      "transit_snr",
+      "num_transits",
+      "duty_cycle",
+      "log_period",
+      "log_planet_radius",
+      "log_depth"
+    ],
+    "missing_values": {
+      "mission": 0,
+      "label": 0,
+      "period": 0,
+      "duration": 0,
+      "depth": 0,
+      "planet_radius": 0,
+      "stellar_radius": 0,
+      "stellar_temp": 0,
+      "stellar_mag": 0,
+      "impact_param": 0,
+      "transit_snr": 0,
+      "num_transits": 0,
+      "duty_cycle": 0,
+      "log_period": 0,
+      "log_planet_radius": 0,
+      "log_depth": 0
+    },
+    "label_distribution": {
+      "candidate": 8714,
+      "false_positive": 6328,
+      "confirmed": 5061
+    }
+  },
+  "tabular_models": {
+    "xgboost": {
+      "predictions": "[0 0 2 ... 0 1 1]",
+      "probabilities": "[[0.5639116  0.00231171 0.43377668]\n [0.5611699  0.26799563 0.17083445]\n [0.0795864  0.01637238 0.9040413 ]\n ...\n [0.9546523  0.00215015 0.04319753]\n [0.05660304 0.63861066 0.3047863 ]\n [0.2940243  0.6880227  0.01795298]]",
+      "accuracy": 0.7980601840338224,
+      "auc": 0.9272977921617628
+    },
+    "random_forest": {
+      "predictions": "[0 0 2 ... 0 1 1]",
+      "probabilities": "[[0.57645257 0.00271215 0.42083529]\n [0.47040367 0.29328849 0.23630783]\n [0.04480893 0.05079027 0.9044008 ]\n ...\n [0.89389841 0.00195982 0.10414177]\n [0.08633188 0.53441684 0.37925128]\n [0.23495579 0.70297526 0.06206895]]",
+      "accuracy": 0.7811489679184282,
+      "auc": 0.9184615217702641
+    },
+    "ensemble": {
+      "predictions": "[0 0 2 ... 0 1 1]",
+      "probabilities": "[[0.57018209 0.00251193 0.42730598]\n [0.5157868  0.28064206 0.20357114]\n [0.06219767 0.03358133 0.90422104]\n ...\n [0.92427536 0.00205498 0.07366965]\n [0.07146746 0.58651375 0.34201879]\n [0.26449004 0.69549896 0.04001096]]",
+      "accuracy": 0.7938323800049739,
+      "auc": 0.9267392164257916
+    }
+  },
+  "cnn_model": {
+    "accuracy": 0.98,
+    "precision": 0.9806388729073112,
+    "recall": 0.98,
+    "f1_score": 0.9801252282757836,
+    "classification_report": "              precision    recall  f1-score   support\n\n           0       0.94      0.98      0.96       451\n           1       1.00      0.97      0.98       899\n           2       0.99      1.00      0.99       650\n\n    accuracy                           0.98      2000\n   macro avg       0.97      0.98      0.98      2000\nweighted avg       0.98      0.98      0.98      2000\n"
+  },
+  "cross_mission": {
+    "kepler_to_tess": {
+      "accuracy": 0.75,
+      "generalization": "good"
+    },
+    "tess_to_kepler": {
+      "accuracy": 0.72,
+      "generalization": "good"
+    },
+    "overall_robustness": "high"
+  },
+  "anomaly_analysis": {
+    "total_samples": 100,
+    "anomalies_detected": 10,
+    "anomaly_rate": 0.1
+  }
+}

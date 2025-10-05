@@ -1,0 +1,29 @@
+2025-09-29 18:24:18,337 - src.api - INFO - info:74 - Inference engine initialized successfully
+2025-09-29 18:24:22,480 - src.validators - INFO - info:74 - Validating prediction input
+2025-09-29 18:24:22,481 - src.validators - INFO - info:74 - Prediction input validation: PASSED
+2025-09-29 18:24:22,510 - src.validators - INFO - info:74 - Validating model prediction
+2025-09-29 18:24:22,510 - src.validators - INFO - info:74 - Prediction validation: PASSED
+2025-09-29 18:24:22,510 - src.api - INFO - info:74 - Prediction made: {'prediction': 'candidate', 'probabilities': {'candidate': 0.6317710454646106, 'confirmed': 0.09899260188342052, 'false_positive': 0.26923632657493685}, 'confidence': 0.6317710454646106}
+2025-09-29 18:33:12,230 - src.explainability - INFO - info:74 - XGBoost model loaded for explanations
+2025-09-29 18:33:12,255 - src.explainability - INFO - info:74 - Random Forest model loaded for explanations
+2025-09-29 18:33:12,313 - src.explainability - INFO - info:74 - XGBoost SHAP explainer initialized
+2025-09-29 18:33:12,326 - src.explainability - INFO - info:74 - Random Forest SHAP explainer initialized
+2025-09-29 18:33:12,333 - src.explainability - INFO - info:74 - LIME explainer initialized
+2025-09-29 18:33:12,353 - src.habitability - INFO - info:74 - Habitability analysis completed: score=0.800, habitable=True
+2025-09-29 18:33:12,367 - src.explainability - ERROR - error:86 - Error getting top features: only integer scalar arrays can be converted to a scalar index
+2025-09-29 18:33:12,367 - src.explainability - INFO - info:74 - SHAP explanation generated for xgboost
+2025-09-29 18:33:12,367 - src.explainability - ERROR - error:86 - Error generating SHAP explanation: SHAP explainer for random_forest not available
+2025-09-29 18:33:12,457 - src.explainability - ERROR - error:86 - Error generating LIME explanation: 'Explanation' object has no attribute 'predicted_class'
+2025-09-29 18:33:12,457 - src.explainability - INFO - info:74 - Ensemble explanation generated
+2025-09-29 18:33:12,483 - src.habitability - INFO - info:74 - Habitability analysis completed: score=0.200, habitable=False
+2025-09-29 18:33:12,691 - src.explainability - ERROR - error:86 - Error getting top features: only integer scalar arrays can be converted to a scalar index
+2025-09-29 18:33:12,691 - src.explainability - INFO - info:74 - SHAP explanation generated for xgboost
+2025-09-29 18:33:12,692 - src.explainability - ERROR - error:86 - Error generating SHAP explanation: SHAP explainer for random_forest not available
+2025-09-29 18:33:12,756 - src.explainability - ERROR - error:86 - Error generating LIME explanation: 'Explanation' object has no attribute 'predicted_class'
+2025-09-29 18:33:12,756 - src.explainability - INFO - info:74 - Ensemble explanation generated
+2025-09-29 18:33:12,805 - src.habitability - INFO - info:74 - Habitability analysis completed: score=0.000, habitable=False
+2025-09-29 18:33:12,832 - src.explainability - ERROR - error:86 - Error getting top features: only integer scalar arrays can be converted to a scalar index
+2025-09-29 18:33:12,833 - src.explainability - INFO - info:74 - SHAP explanation generated for xgboost
+2025-09-29 18:33:12,833 - src.explainability - ERROR - error:86 - Error generating SHAP explanation: SHAP explainer for random_forest not available
+2025-09-29 18:33:12,891 - src.explainability - ERROR - error:86 - Error generating LIME explanation: 'Explanation' object has no attribute 'predicted_class'
+2025-09-29 18:33:12,892 - src.explainability - INFO - info:74 - Ensemble explanation generated
